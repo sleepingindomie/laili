@@ -1,55 +1,168 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+
+interface Pesanan {
+  id: number;
+  total_harga: number;
+  status: string;
+  catatan: string | null;
+  resi: string | null;
+  tanggal_pesan: string;
+  tanggal_selesai: string | null;
+  profiles: {
+    nama_lengkap: string;
+  } | null;
+}
+
+interface TrackingResi {
+  id: number;
+  pesanan_id: number;
+  resi: string;
+  kurir: string;
+  status_pengiriman: string;
+  tanggal_update: string;
+  pesanan: {
+    id: number;
+    profiles: {
+      nama_lengkap: string;
+    } | null;
+  };
+}
 
 export default function UpdateResiPage() {
-  const [selectedOrder, setSelectedOrder] = useState<number | null>(null);
+  const [ordersNeedingResi, setOrdersNeedingResi] = useState<Pesanan[]>([]);
+  const [completedOrders, setCompletedOrders] = useState<TrackingResi[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState<number | null>(null);
+  const supabase = createClient();
 
-  const ordersNeedingResi = [
-    {
-      id: 1,
-      nomorOrder: "ORD-2025-001",
-      tanggal: "10 Januari 2025",
-      pelanggan: "Siti Aminah",
-      produk: "Paket Starter Premium",
-      total: 350000,
-      status: "Menunggu Resi",
-      resi: "",
-    },
-    {
-      id: 2,
-      nomorOrder: "ORD-2025-002",
-      tanggal: "12 Januari 2025",
-      pelanggan: "Dewi Lestari",
-      produk: "Paket Complete Bundle",
-      total: 750000,
-      status: "Menunggu Resi",
-      resi: "",
-    },
-  ];
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const completedOrders = [
-    {
-      id: 3,
-      nomorOrder: "ORD-2024-099",
-      tanggal: "28 Desember 2024",
-      pelanggan: "Rina Wijaya",
-      produk: "Paket Starter",
-      resi: "JNE1234567890",
-      kurir: "JNE",
-      tanggalUpdate: "29 Desember 2024",
-    },
-    {
-      id: 4,
-      nomorOrder: "ORD-2024-098",
-      tanggal: "25 Desember 2024",
-      pelanggan: "Maya Putri",
-      produk: "Paket Premium",
-      resi: "SICEPAT0987654321",
-      kurir: "SiCepat",
-      tanggalUpdate: "26 Desember 2024",
-    },
-  ];
+  const fetchData = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Fetch pesanan yang belum ada resi (status dikirim tapi resi masih null)
+      const { data: needingResiData, error: needingResiError } = await supabase
+        .from('pesanan')
+        .select(`
+          *,
+          profiles:user_id (nama_lengkap)
+        `)
+        .eq('user_id', user.id)
+        .is('resi', null)
+        .in('status', ['pending', 'diproses'])
+        .order('tanggal_pesan', { ascending: false });
+
+      if (needingResiError) throw needingResiError;
+      setOrdersNeedingResi(needingResiData || []);
+
+      // Fetch riwayat tracking resi yang sudah diupdate
+      const { data: completedData, error: completedError } = await supabase
+        .from('tracking_resi')
+        .select(`
+          id,
+          pesanan_id,
+          resi,
+          kurir,
+          status_pengiriman,
+          tanggal_update,
+          pesanan:pesanan_id (
+            id,
+            profiles:user_id (nama_lengkap)
+          )
+        `)
+        .order('tanggal_update', { ascending: false })
+        .limit(20);
+
+      if (completedError) throw completedError;
+      setCompletedOrders(completedData || []);
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateResi = async (e: React.FormEvent<HTMLFormElement>, pesananId: number) => {
+    e.preventDefault();
+    setUpdating(pesananId);
+
+    const formData = new FormData(e.currentTarget);
+    const kurir = formData.get('kurir') as string;
+    const resi = formData.get('resi') as string;
+
+    try {
+      // Update resi di tabel pesanan
+      const { error: updateError } = await supabase
+        .from('pesanan')
+        .update({
+          resi: resi,
+          status: 'dikirim'
+        })
+        .eq('id', pesananId);
+
+      if (updateError) throw updateError;
+
+      // Insert tracking resi
+      const { error: trackingError } = await supabase
+        .from('tracking_resi')
+        .insert({
+          pesanan_id: pesananId,
+          resi: resi,
+          kurir: kurir,
+          status_pengiriman: 'dikirim',
+          lokasi_terakhir: 'Dalam proses pengiriman',
+          deskripsi_status: 'Paket telah diserahkan ke kurir',
+        });
+
+      if (trackingError) throw trackingError;
+
+      alert('✅ Nomor resi berhasil diupdate!');
+
+      // Refresh data
+      fetchData();
+
+      // Reset form
+      e.currentTarget.reset();
+
+    } catch (error: any) {
+      console.error('Error updating resi:', error);
+      alert(error.message || 'Terjadi kesalahan saat update resi');
+    } finally {
+      setUpdating(null);
+    }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="container-responsive py-8">
+        <div className="text-center py-12 text-gray-500">Memuat data...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="container-responsive py-8">
@@ -64,14 +177,14 @@ export default function UpdateResiPage() {
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-xl bg-white p-6 shadow-md">
           <div className="mb-2 text-sm font-medium text-gray-600">Menunggu Resi</div>
-          <div className="text-3xl font-bold text-gray-800">{ordersNeedingResi.length}</div>
+          <div className="text-3xl font-bold text-orange-600">{ordersNeedingResi.length}</div>
         </div>
         <div className="rounded-xl bg-white p-6 shadow-md">
           <div className="mb-2 text-sm font-medium text-gray-600">Selesai Update</div>
-          <div className="text-3xl font-bold text-gray-800">{completedOrders.length}</div>
+          <div className="text-3xl font-bold text-green-600">{completedOrders.length}</div>
         </div>
         <div className="rounded-xl bg-white p-6 shadow-md">
-          <div className="mb-2 text-sm font-medium text-gray-600">Total Order Bulan Ini</div>
+          <div className="mb-2 text-sm font-medium text-gray-600">Total Order</div>
           <div className="text-3xl font-bold text-gray-800">
             {ordersNeedingResi.length + completedOrders.length}
           </div>
@@ -81,113 +194,116 @@ export default function UpdateResiPage() {
       {/* Orders Needing Resi */}
       <div className="mb-8">
         <h2 className="mb-4 text-xl font-semibold text-gray-800">
-          Pesanan Menunggu Nomor Resi
+          Pesanan Menunggu Nomor Resi ({ordersNeedingResi.length})
         </h2>
-        <div className="space-y-4">
-          {ordersNeedingResi.map((order) => (
-            <div
-              key={order.id}
-              className="rounded-xl bg-white p-6 shadow-md"
-            >
-              <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="flex-1">
-                  <div className="mb-2 flex items-center gap-2">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {order.nomorOrder}
-                    </h3>
-                    <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
-                      {order.status}
-                    </span>
-                  </div>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <span>📅</span>
-                      <span>{order.tanggal}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span>👤</span>
-                      <span>{order.pelanggan}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span>📦</span>
-                      <span>{order.produk}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span>💰</span>
-                      <span className="font-semibold">
-                        Rp {order.total.toLocaleString("id-ID")}
+        {ordersNeedingResi.length === 0 ? (
+          <div className="rounded-xl bg-white p-12 text-center text-gray-500 shadow-md">
+            Tidak ada pesanan yang menunggu nomor resi
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {ordersNeedingResi.map((order) => (
+              <div
+                key={order.id}
+                className="rounded-xl bg-white p-6 shadow-md"
+              >
+                <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex-1">
+                    <div className="mb-2 flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        Order #{order.id}
+                      </h3>
+                      <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
+                        {order.status === 'pending' ? 'Pending' : 'Diproses'}
                       </span>
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <div className="flex items-center gap-2">
+                        <span>📅</span>
+                        <span>{formatDate(order.tanggal_pesan)}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span>👤</span>
+                        <span>{order.profiles?.nama_lengkap || 'N/A'}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span>💰</span>
+                        <span className="font-semibold">
+                          {formatCurrency(order.total_harga)}
+                        </span>
+                      </div>
+                      {order.catatan && (
+                        <div className="flex items-start gap-2">
+                          <span>📝</span>
+                          <span className="italic">{order.catatan}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Update Resi Form */}
-              <div className="border-t border-gray-100 pt-4">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    alert("Nomor resi berhasil diupdate!");
-                  }}
-                  className="space-y-4"
-                >
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <label
-                        htmlFor={`kurir-${order.id}`}
-                        className="mb-2 block text-sm font-medium text-gray-700"
-                      >
-                        Pilih Kurir
-                      </label>
-                      <select
-                        id={`kurir-${order.id}`}
-                        className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                        required
-                      >
-                        <option value="">Pilih kurir...</option>
-                        <option value="JNE">JNE</option>
-                        <option value="JNT">JNT</option>
-                        <option value="SiCepat">SiCepat</option>
-                        <option value="Anteraja">Anteraja</option>
-                        <option value="PosIndonesia">Pos Indonesia</option>
-                        <option value="IDExpress">ID Express</option>
-                      </select>
+                {/* Update Resi Form */}
+                <div className="border-t border-gray-100 pt-4">
+                  <form
+                    onSubmit={(e) => handleUpdateResi(e, order.id)}
+                    className="space-y-4"
+                  >
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      <div>
+                        <label
+                          htmlFor={`kurir-${order.id}`}
+                          className="mb-2 block text-sm font-medium text-gray-700"
+                        >
+                          Pilih Kurir *
+                        </label>
+                        <select
+                          id={`kurir-${order.id}`}
+                          name="kurir"
+                          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-secondary-500 focus:outline-none focus:ring-2 focus:ring-secondary-200"
+                          required
+                        >
+                          <option value="">Pilih kurir...</option>
+                          <option value="JNE">JNE</option>
+                          <option value="J&T Express">J&T Express</option>
+                          <option value="SiCepat">SiCepat</option>
+                          <option value="Anteraja">Anteraja</option>
+                          <option value="Pos Indonesia">Pos Indonesia</option>
+                          <option value="ID Express">ID Express</option>
+                          <option value="Ninja Xpress">Ninja Xpress</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor={`resi-${order.id}`}
+                          className="mb-2 block text-sm font-medium text-gray-700"
+                        >
+                          Nomor Resi *
+                        </label>
+                        <input
+                          type="text"
+                          id={`resi-${order.id}`}
+                          name="resi"
+                          placeholder="Contoh: JNE1234567890"
+                          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-secondary-500 focus:outline-none focus:ring-2 focus:ring-secondary-200"
+                          required
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label
-                        htmlFor={`resi-${order.id}`}
-                        className="mb-2 block text-sm font-medium text-gray-700"
+                    <div className="flex gap-2">
+                      <button
+                        type="submit"
+                        disabled={updating === order.id}
+                        className="touch-target flex-1 rounded-lg bg-secondary-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-secondary-700 disabled:opacity-50 sm:flex-initial"
                       >
-                        Nomor Resi
-                      </label>
-                      <input
-                        type="text"
-                        id={`resi-${order.id}`}
-                        placeholder="Contoh: JNE1234567890"
-                        className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                        required
-                      />
+                        {updating === order.id ? 'Memproses...' : '📦 Update Resi'}
+                      </button>
                     </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      type="submit"
-                      className="touch-target flex-1 rounded-lg bg-gray-900 px-6 py-3 font-semibold text-white transition-colors hover:bg-gray-800 sm:flex-initial"
-                    >
-                      Update Resi
-                    </button>
-                    <button
-                      type="button"
-                      className="touch-target rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50"
-                    >
-                      Lihat Detail Order
-                    </button>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Completed Orders */}
@@ -195,66 +311,78 @@ export default function UpdateResiPage() {
         <h2 className="mb-4 text-xl font-semibold text-gray-800">
           Riwayat Update Resi
         </h2>
-        <div className="rounded-xl bg-white p-6 shadow-md">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="py-3 text-left font-semibold text-gray-700">
-                    Nomor Order
-                  </th>
-                  <th className="py-3 text-left font-semibold text-gray-700">
-                    Pelanggan
-                  </th>
-                  <th className="py-3 text-left font-semibold text-gray-700">
-                    Kurir
-                  </th>
-                  <th className="py-3 text-left font-semibold text-gray-700">
-                    Nomor Resi
-                  </th>
-                  <th className="py-3 text-left font-semibold text-gray-700">
-                    Tanggal Update
-                  </th>
-                  <th className="py-3 text-left font-semibold text-gray-700">
-                    Aksi
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {completedOrders.map((order) => (
-                  <tr key={order.id} className="border-b border-gray-100">
-                    <td className="py-4 text-gray-800">{order.nomorOrder}</td>
-                    <td className="py-4 text-gray-800">{order.pelanggan}</td>
-                    <td className="py-4">
-                      <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                        {order.kurir}
-                      </span>
-                    </td>
-                    <td className="py-4 font-mono text-sm text-gray-600">
-                      {order.resi}
-                    </td>
-                    <td className="py-4 text-gray-600">{order.tanggalUpdate}</td>
-                    <td className="py-4">
-                      <button className="text-sm font-medium text-gray-900 hover:underline">
-                        Lacak
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {completedOrders.length === 0 ? (
+          <div className="rounded-xl bg-white p-12 text-center text-gray-500 shadow-md">
+            Belum ada riwayat update resi
           </div>
-        </div>
+        ) : (
+          <div className="rounded-xl bg-white p-6 shadow-md">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="py-3 text-left text-sm font-semibold text-gray-700">
+                      Order ID
+                    </th>
+                    <th className="py-3 text-left text-sm font-semibold text-gray-700">
+                      Pelanggan
+                    </th>
+                    <th className="py-3 text-left text-sm font-semibold text-gray-700">
+                      Kurir
+                    </th>
+                    <th className="py-3 text-left text-sm font-semibold text-gray-700">
+                      Nomor Resi
+                    </th>
+                    <th className="py-3 text-left text-sm font-semibold text-gray-700">
+                      Status
+                    </th>
+                    <th className="py-3 text-left text-sm font-semibold text-gray-700">
+                      Tanggal Update
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {completedOrders.map((tracking) => (
+                    <tr key={tracking.id} className="border-b border-gray-100">
+                      <td className="py-4 text-sm text-gray-800">
+                        #{tracking.pesanan_id}
+                      </td>
+                      <td className="py-4 text-sm text-gray-800">
+                        {tracking.pesanan?.profiles?.nama_lengkap || 'N/A'}
+                      </td>
+                      <td className="py-4">
+                        <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                          {tracking.kurir}
+                        </span>
+                      </td>
+                      <td className="py-4 font-mono text-sm text-gray-600">
+                        {tracking.resi}
+                      </td>
+                      <td className="py-4">
+                        <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+                          {tracking.status_pengiriman}
+                        </span>
+                      </td>
+                      <td className="py-4 text-sm text-gray-600">
+                        {formatDate(tracking.tanggal_update)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Info Box */}
-      <div className="mt-8 rounded-xl border-l-4 border-gray-900 bg-gray-50 p-6">
+      <div className="mt-8 rounded-xl border-l-4 border-secondary-600 bg-secondary-50 p-6">
         <h3 className="mb-2 font-semibold text-gray-800">💡 Tips Update Resi</h3>
         <ul className="space-y-2 text-sm text-gray-600">
           <li>• Pastikan nomor resi yang diinput sudah benar dan sesuai dengan kurir</li>
           <li>• Update resi segera setelah paket dikirim untuk kepuasan pelanggan</li>
-          <li>• Pelanggan akan menerima notifikasi otomatis setelah resi diupdate</li>
-          <li>• Anda bisa melacak status pengiriman dengan klik tombol "Lacak"</li>
+          <li>• Status pesanan otomatis berubah menjadi "Dikirim" setelah resi diupdate</li>
+          <li>• Tracking resi akan tersimpan di riwayat untuk referensi ke depan</li>
         </ul>
       </div>
     </div>
