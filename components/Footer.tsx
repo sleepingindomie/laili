@@ -18,13 +18,6 @@ export default function Footer() {
               Ibu Berkarir dalam Dalam rumah
             </p>
           </div>
-          <div>
-            <h4 className="mb-3 font-bold text-white">Kontak</h4>
-            <ul className="space-y-2">
-              <li className="text-gray-300">Email: info@laili.com</li>
-              <li className="text-gray-300">WhatsApp: 0812-3456-7890</li>
-            </ul>
-          </div>
         </div>
 
         <div
