@@ -47,7 +47,7 @@ export default function MitraProfilPage() {
     };
 
     fetchUserData();
-  }, []);
+  }, [supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

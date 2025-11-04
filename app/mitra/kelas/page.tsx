@@ -73,7 +73,7 @@ export default function MitraKelasPage() {
     };
 
     fetchData();
-  }, []);
+  }, [supabase]);
 
   return (
     <div className="container-responsive py-8">

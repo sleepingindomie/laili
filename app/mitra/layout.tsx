@@ -35,7 +35,7 @@ export default function MitraLayout({
       }
     };
     getUser();
-  }, []);
+  }, [supabase]);
 
   const navigation = [
     { name: "Beranda", href: "/mitra/beranda", icon: Home },

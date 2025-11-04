@@ -48,7 +48,7 @@ export default function MitraKatalogPage() {
     };
 
     fetchProducts();
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     let filtered = products;

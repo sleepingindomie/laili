@@ -58,7 +58,7 @@ export default function MitraBerandaPage() {
     };
 
     fetchStats();
-  }, []);
+  }, [supabase]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('id-ID', {
