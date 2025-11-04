@@ -1,40 +1,10 @@
 import Link from "next/link";
-import Logo from "@/components/Logo";
+import Navigation from "@/components/Navigation";
 
 export default function ProfilPage() {
   return (
         <div className="min-h-screen" style={{ background: 'var(--accent-warm)' }}>
-              {/* Navigation */}
-              <nav className="sticky top-0 z-50 bg-white shadow-md">
-                <div className="container-responsive py-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Logo width={120} height={38} priority />
-                    </div>
-
-            <div className="hidden items-center gap-6 md:flex">
-              <Link href="/" className="text-gray-600 transition-colors hover:text-gray-900">
-                Beranda
-              </Link>
-              <Link href="/profil" className="font-semibold text-gray-900">
-                Profil
-              </Link>
-              <Link href="/social-media" className="text-gray-600 transition-colors hover:text-gray-900">
-                Social Media
-              </Link>
-              <Link href="/brand" className="text-gray-600 transition-colors hover:text-gray-900">
-                Brand
-              </Link>
-              <Link
-                href="/login"
-                className="touch-target rounded-lg bg-gray-900 px-6 py-2 text-white transition-colors hover:bg-gray-800"
-              >
-                Login
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+              <Navigation />
 
       {/* Hero Section */}
       <section className="border-b border-gray-100 bg-gradient-to-b from-gray-50 to-white py-16">

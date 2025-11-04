@@ -1,23 +1,9 @@
-import Link from "next/link";
+import Navigation from "@/components/Navigation";
 
 export default function BrandPage() {
   return (
     <div className="min-h-screen bg-white">
-      <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
-        <div className="container-responsive py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-900">
-                <span className="text-xl font-bold text-white">L</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">Laili</span>
-            </Link>
-            <Link href="/login" className="rounded-lg bg-gray-900 px-6 py-2 text-white hover:bg-gray-800">
-              Login
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       <section className="py-16">
         <div className="container-responsive">

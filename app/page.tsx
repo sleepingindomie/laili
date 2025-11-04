@@ -59,7 +59,7 @@ export default function HomePage() {
           <div className="text-center">
             <h1 className="mb-5 text-balance">
               Selamat Datang di <br className="sm:hidden" />
-              <span style={{ color: 'var(--accent-darker)' }}>Laili Mitra</span>
+              <span style={{ color: 'var(--accent-darker)' }}>Laili Brand</span>
             </h1>
             <p
               className="mx-auto mb-8 max-w-2xl text-balance leading-relaxed"

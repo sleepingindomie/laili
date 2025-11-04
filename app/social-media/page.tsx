@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Instagram, Facebook, Youtube, Twitter, MessageCircle } from "lucide-react";
+import { Instagram, Youtube, Twitter, MessageCircle } from "lucide-react";
+import Navigation from "@/components/Navigation";
 
 export default function SocialMediaPage() {
   const socialLinks = [
@@ -39,40 +40,7 @@ export default function SocialMediaPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
-        <div className="container-responsive py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-900">
-                <span className="text-xl font-bold text-white">L</span>
-              </div>
-              <span className="hidden text-xl font-bold text-gray-900 sm:block">Laili</span>
-            </Link>
-
-            <div className="hidden items-center gap-6 md:flex">
-              <Link href="/" className="text-gray-600 transition-colors hover:text-gray-900">
-                Beranda
-              </Link>
-              <Link href="/profil" className="text-gray-600 transition-colors hover:text-gray-900">
-                Profil
-              </Link>
-              <Link href="/social-media" className="font-semibold text-gray-900">
-                Social Media
-              </Link>
-              <Link href="/brand" className="text-gray-600 transition-colors hover:text-gray-900">
-                Brand
-              </Link>
-              <Link
-                href="/login"
-                className="touch-target rounded-lg bg-gray-900 px-6 py-2 text-white transition-colors hover:bg-gray-800"
-              >
-                Login
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Hero Section */}
       <section className="border-b border-gray-100 bg-gradient-to-b from-gray-50 to-white py-16">

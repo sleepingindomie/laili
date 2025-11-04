@@ -71,57 +71,59 @@ export default function MitraLayout({
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden items-center gap-6 md:flex">
-              {navigation.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`flex items-center gap-2 font-medium transition-colors ${
-                      isActive
-                        ? "text-gray-900"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
+            <div className="hidden md:flex md:flex-1 md:items-center md:justify-between md:ml-8">
+              <div className="flex items-center gap-6">
+                {navigation.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={`flex items-center gap-2 font-medium transition-colors ${
+                        isActive
+                          ? "text-gray-900"
+                          : "text-gray-600 hover:text-gray-900"
+                      }`}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  );
+                })}
+
+                {/* Info Dropdown - Desktop */}
+                <div className="relative">
+                  <button
+                    onClick={() => setIsInfoDropdownOpen(!isInfoDropdownOpen)}
+                    className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50"
                   >
-                    <item.icon className="h-5 w-5" />
-                    <span>{item.name}</span>
-                  </Link>
-                );
-              })}
+                    <span>Info</span>
+                    <ChevronDown className={`h-4 w-4 transition-transform ${isInfoDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
 
-              {/* Info Dropdown - Desktop */}
-              <div className="relative">
-                <button
-                  onClick={() => setIsInfoDropdownOpen(!isInfoDropdownOpen)}
-                  className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50"
-                >
-                  <span>Info</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${isInfoDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-
-                {isInfoDropdownOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-10"
-                      onClick={() => setIsInfoDropdownOpen(false)}
-                    />
-                    <div className="absolute right-0 z-20 mt-2 w-56 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                      {infoMenuItems.map((item, index) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => setIsInfoDropdownOpen(false)}
-                          className={`block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 ${
-                            index === 0 ? 'rounded-t-lg' : ''
-                          } ${index === infoMenuItems.length - 1 ? 'rounded-b-lg' : ''}`}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                )}
+                  {isInfoDropdownOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setIsInfoDropdownOpen(false)}
+                      />
+                      <div className="absolute right-0 z-20 mt-2 w-56 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                        {infoMenuItems.map((item, index) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => setIsInfoDropdownOpen(false)}
+                            className={`block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 ${
+                              index === 0 ? 'rounded-t-lg' : ''
+                            } ${index === infoMenuItems.length - 1 ? 'rounded-b-lg' : ''}`}
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Logout Button */}

@@ -1,7 +1,22 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
 
 export default function Navigation() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const navigation = [
+    { name: "Beranda", href: "/" },
+    { name: "Profil", href: "/profil" },
+    { name: "Social Media", href: "/social-media" },
+    { name: "Brand", href: "/brand" },
+  ];
+
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container-responsive py-4">
@@ -12,37 +27,25 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden items-center gap-6 md:flex">
-            <Link
-              href="/"
-              className="font-medium transition-colors"
-              style={{ color: 'var(--accent-dark)' }}
-            >
-              Beranda
-            </Link>
-            <Link
-              href="/profil"
-              className="font-medium transition-colors"
-              style={{ color: 'var(--accent-dark)' }}
-            >
-              Profil
-            </Link>
-            <Link
-              href="/social-media"
-              className="font-medium transition-colors"
-              style={{ color: 'var(--accent-dark)' }}
-            >
-              Social Media
-            </Link>
-            <Link
-              href="/brand"
-              className="font-medium transition-colors"
-              style={{ color: 'var(--accent-dark)' }}
-            >
-              Brand
-            </Link>
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`font-medium transition-colors ${
+                    isActive
+                      ? "text-gray-900 font-semibold"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
             <Link
               href="/login"
-              className="btn-primary"
+              className="touch-target rounded-lg bg-gray-900 px-6 py-2 text-white transition-colors hover:bg-gray-800"
             >
               Login Mitra
             </Link>
@@ -50,16 +53,52 @@ export default function Navigation() {
 
           {/* Mobile Menu Button */}
           <button
-            className="touch-target md:hidden"
-            aria-label="Menu"
-            style={{ color: 'var(--accent-dark)' }}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="touch-target text-gray-900 md:hidden"
+            aria-label="Toggle menu"
           >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="border-t border-gray-200 bg-white md:hidden">
+          <div className="container-responsive py-4">
+            <div className="space-y-2">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block touch-target rounded-lg px-4 py-3 transition-colors ${
+                      isActive
+                        ? "bg-gray-100 text-gray-900 font-semibold"
+                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block touch-target rounded-lg bg-gray-900 px-4 py-3 text-center text-white transition-colors hover:bg-gray-800"
+              >
+                Login Mitra
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
