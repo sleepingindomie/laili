@@ -359,7 +359,7 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Email Registration Form */}
+            {/* Email registration form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="namaLengkap" className="mb-2 block font-medium" style={{ color: 'var(--primary-700)' }}>

@@ -313,7 +313,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Email Login Form */}
+            {/* Email login form */}
             <form onSubmit={handleEmailLogin} className="space-y-5">
               <div>
                 <label htmlFor="email" className="mb-2 block font-medium" style={{ color: 'var(--primary-700)' }}>
