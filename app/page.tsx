@@ -12,41 +12,24 @@ export default function HomePage() {
               <Logo width={120} height={38} priority />
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden items-center gap-6 md:flex">
-              <Link
-                href="/"
-                className="font-medium transition-colors"
-                style={{ color: 'var(--accent-dark)' }}
-              >
+              <Link href="/" className="text-gray-600 transition-colors hover:text-gray-900">
                 Beranda
               </Link>
-              <Link
-                href="/profil"
-                className="font-medium transition-colors"
-                style={{ color: 'var(--accent-dark)' }}
-              >
+              <Link href="/profil" className="font-semibold text-gray-900">
                 Profil
               </Link>
-              <Link
-                href="/social-media"
-                className="font-medium transition-colors"
-                style={{ color: 'var(--accent-dark)' }}
-              >
+              <Link href="/social-media" className="text-gray-600 transition-colors hover:text-gray-900">
                 Social Media
               </Link>
-              <Link
-                href="/brand"
-                className="font-medium transition-colors"
-                style={{ color: 'var(--accent-dark)' }}
-              >
+              <Link href="/brand" className="text-gray-600 transition-colors hover:text-gray-900">
                 Brand
               </Link>
               <Link
                 href="/login"
-                className="btn-primary"
+                className="touch-target rounded-lg bg-gray-900 px-6 py-2 text-white transition-colors hover:bg-gray-800"
               >
-                Login Mitra
+                Login
               </Link>
             </div>
 
