@@ -61,9 +61,8 @@ export default function Navigation() {
     setIsMobileMenuOpen(false);
   }, []);
 
-  // ⭐ PERBAIKAN 1: Menangani penutup menu global dan SS
+  // PERBAIKAN 1: Menangani penutup menu global
   useEffect(() => {
-    // Memastikan kode hanya berjalan di browser
     if (typeof window !== 'undefined' && document) {
         const handleClose = () => closeAllMenus();
         
@@ -75,7 +74,7 @@ export default function Navigation() {
     }
   }, [closeAllMenus]);
   
-  // ⭐ PERBAIKAN 2: Logic yang lebih kuat untuk menutup menu mobile saat resize/desktop
+  // PERBAIKAN 2: Logic yang lebih kuat untuk menutup menu mobile saat resize/desktop
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -98,7 +97,7 @@ export default function Navigation() {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []); // [] agar hanya berjalan saat mount dan unmount
+  }, []); 
   
   // Data Navigasi
   const navigation: NavItem[] = [
@@ -205,7 +204,7 @@ export default function Navigation() {
 
       {/* 2. Menu Mobile Drawer (Hidden di Desktop) */}
       {isMobileMenuOpen && (
-        <div className="hidden bg-white shadow-lg pb-4 border-t border-gray-100">
+        <div className="md:hidden bg-white shadow-lg pb-4 border-t border-gray-100">
           <div className="flex flex-col space-y-1 px-4 pt-3">
             
             {/* Tautan Navigasi Mobile */}
