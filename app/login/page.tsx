@@ -173,7 +173,7 @@ export default function LoginPage() {
                     className="touch-target w-full rounded-lg border py-3 pl-10 pr-4 focus:outline-none focus:ring-2"
                     style={{
                       borderColor: 'var(--primary-300)',
-                      focusRingColor: 'var(--accent-dark)'
+                      outlineColor: 'var(--accent-dark)',
                     }}
                     placeholder="nama@example.com"
                   />
