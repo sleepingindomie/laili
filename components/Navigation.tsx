@@ -185,7 +185,7 @@ export default function Navigation() {
           </button>
 
           {/* 1. Navigasi Desktop (Hidden di Mobile) */}
-          <div className="hidden items-center gap-6 md:flex">
+          <div className="md:hidden items-center gap-6 md:flex">
             {navigation.map((item) => (
               <NavLink key={item.name} item={item} />
             ))}
