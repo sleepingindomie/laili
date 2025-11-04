@@ -217,6 +217,23 @@ export default function RegisterPage() {
     setError("");
     setIsLoading(true);
 
+    // Sanitize and validate email
+    const sanitizedEmail = formData.email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(sanitizedEmail)) {
+      setError("Format email tidak valid. Pastikan email Anda benar.");
+      setIsLoading(false);
+      return;
+    }
+
+    // Validate name
+    if (!formData.namaLengkap.trim()) {
+      setError("Nama lengkap harus diisi");
+      setIsLoading(false);
+      return;
+    }
+
     // Validation
     if (formData.password !== formData.confirmPassword) {
       setError("Password dan konfirmasi password tidak cocok");
@@ -231,15 +248,17 @@ export default function RegisterPage() {
     }
 
     try {
+      console.log('Attempting signup with email:', sanitizedEmail);
+
       // Sign up user
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
-        email: formData.email,
+        email: sanitizedEmail,
         password: formData.password,
         options: {
           data: {
-            nama_lengkap: formData.namaLengkap,
-            nomor_telepon: formData.nomorTelepon,
-            alamat: formData.alamat,
+            nama_lengkap: formData.namaLengkap.trim(),
+            nomor_telepon: formData.nomorTelepon.trim(),
+            alamat: formData.alamat.trim(),
           },
           emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
         }
@@ -263,10 +282,10 @@ export default function RegisterPage() {
           .from('profiles')
           .upsert({
             id: authData.user.id,
-            email: formData.email,
-            nama_lengkap: formData.namaLengkap,
-            nomor_telepon: formData.nomorTelepon,
-            alamat: formData.alamat,
+            email: sanitizedEmail,
+            nama_lengkap: formData.namaLengkap.trim(),
+            nomor_telepon: formData.nomorTelepon.trim(),
+            alamat: formData.alamat.trim(),
             updated_at: new Date().toISOString(),
           }, {
             onConflict: 'id',
@@ -401,13 +420,17 @@ export default function RegisterPage() {
                     type="email"
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value.trim() })}
+                    onBlur={(e) => setFormData({ ...formData, email: e.target.value.trim().toLowerCase() })}
                     className="touch-target w-full rounded-lg border py-3 pl-10 pr-4 focus:outline-none focus:ring-2"
                     style={{
                       borderColor: 'var(--primary-300)',
                       outlineColor: 'var(--accent-dark)',
                     }}
                     placeholder="nama@example.com"
+                    autoComplete="email"
+                    spellCheck="false"
+                    autoCapitalize="none"
                   />
                 </div>
               </div>
