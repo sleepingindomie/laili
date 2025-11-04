@@ -188,14 +188,47 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Handle specific error cases
+        if (error.message.includes('Email not confirmed')) {
+          throw new Error('Email belum diverifikasi. Silakan cek inbox email Anda dan klik link verifikasi.');
+        }
+        if (error.message.includes('Invalid login credentials')) {
+          throw new Error('Email atau password salah. Silakan coba lagi.');
+        }
+        throw error;
+      }
+
+      // Check if user has profile data
+      if (data.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('nama_lengkap')
+          .eq('id', data.user.id)
+          .single();
+
+        if (!profile) {
+          // Profile doesn't exist, create one
+          await supabase
+            .from('profiles')
+            .insert({
+              id: data.user.id,
+              email: data.user.email,
+              nama_lengkap: data.user.user_metadata?.nama_lengkap || '',
+              nomor_telepon: data.user.user_metadata?.nomor_telepon || '',
+              alamat: data.user.user_metadata?.alamat || '',
+            });
+        }
+      }
+
       router.push("/mitra/beranda");
     } catch (error: any) {
+      console.error('Login error:', error);
       setError(error.message || "Terjadi kesalahan saat login");
     } finally {
       setIsLoading(false);

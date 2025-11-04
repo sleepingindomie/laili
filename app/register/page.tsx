@@ -240,7 +240,8 @@ export default function RegisterPage() {
             nama_lengkap: formData.namaLengkap,
             nomor_telepon: formData.nomorTelepon,
             alamat: formData.alamat,
-          }
+          },
+          emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
         }
       });
 
@@ -254,32 +255,38 @@ export default function RegisterPage() {
 
       if (authData.user) {
         // Wait a bit for auth trigger to complete
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-        // Check if profile already exists (created by trigger)
-        const { data: existingProfile, error: checkError } = await supabase
+        // Use UPSERT to either insert or update profile data
+        // This ensures data is always saved regardless of trigger
+        const { error: profileError } = await supabase
           .from('profiles')
-          .select('id')
+          .upsert({
+            id: authData.user.id,
+            email: formData.email,
+            nama_lengkap: formData.namaLengkap,
+            nomor_telepon: formData.nomorTelepon,
+            alamat: formData.alamat,
+            updated_at: new Date().toISOString(),
+          }, {
+            onConflict: 'id',
+            ignoreDuplicates: false,
+          });
+
+        if (profileError) {
+          console.error('Profile upsert error:', profileError);
+          // Still continue even if profile save fails
+          // User can update profile later
+        }
+
+        // Verify profile was saved
+        const { data: verifyProfile } = await supabase
+          .from('profiles')
+          .select('nama_lengkap, email')
           .eq('id', authData.user.id)
           .single();
 
-        // Only insert if profile doesn't exist yet
-        if (!existingProfile && !checkError) {
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .insert({
-              id: authData.user.id,
-              email: formData.email,
-              nama_lengkap: formData.namaLengkap,
-              nomor_telepon: formData.nomorTelepon,
-              alamat: formData.alamat,
-            });
-
-          if (profileError && !profileError.message.includes('duplicate key')) {
-            console.error('Profile creation error:', profileError);
-            // Don't throw error here, profile might be created by trigger
-          }
-        }
+        console.log('Profile saved:', verifyProfile);
 
         // Check if email confirmation is required
         if (authData.session) {

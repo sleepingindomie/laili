@@ -14,6 +14,13 @@ export default function MitraProfilPage() {
     address: "",
     joined_date: "",
   });
+  const [originalData, setOriginalData] = useState({
+    email: "",
+    full_name: "",
+    phone: "",
+    address: "",
+    joined_date: "",
+  });
   const supabase = createClient();
 
   useEffect(() => {
@@ -35,13 +42,16 @@ export default function MitraProfilPage() {
         }
 
         // Set user data - jika data ada, gunakan dari DB, jika tidak gunakan default
-        setUserData({
+        const profileData = {
           email: user.email || "",
           full_name: data?.nama_lengkap || "",
           phone: data?.nomor_telepon || "",
           address: data?.alamat || "",
           joined_date: data?.tanggal_bergabung || new Date().toISOString(),
-        });
+        };
+
+        setUserData(profileData);
+        setOriginalData(profileData); // Save original data for reset
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -51,6 +61,11 @@ export default function MitraProfilPage() {
 
     fetchUserData();
   }, [supabase]);
+
+  const handleCancel = () => {
+    setUserData(originalData);
+    setMessage({ type: "", text: "" });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -197,26 +212,23 @@ export default function MitraProfilPage() {
               />
             </div>
 
-            <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+            <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={handleCancel}
+                disabled={saving}
+                className="touch-target order-2 rounded-lg border-2 border-gray-300 bg-white px-8 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed sm:order-1"
+              >
+                Batal
+              </button>
+
               <button
                 type="submit"
                 disabled={saving}
-                className="touch-target flex-1 rounded-lg bg-secondary-500 px-8 py-3 font-semibold text-white transition-colors hover:bg-secondary-600 disabled:opacity-50 sm:flex-initial"
+                className="touch-target order-1 rounded-lg bg-secondary-600 px-8 py-3 font-semibold text-white transition-colors hover:bg-secondary-700 disabled:opacity-50 disabled:cursor-not-allowed sm:order-2"
               >
-                {saving ? "Menyimpan..." : "💾 Simpan Perubahan"}
+                {saving ? "Menyimpan..." : "Simpan Perubahan"}
               </button>
-
-              {userData.full_name && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    window.location.reload();
-                  }}
-                  className="touch-target rounded-lg border border-gray-300 bg-white px-8 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
-                >
-                  🔄 Batal
-                </button>
-              )}
             </div>
 
             <p className="text-xs text-gray-500">
