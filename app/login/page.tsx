@@ -263,11 +263,11 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="mb-8 grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-8 grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <h4 className="mb-3 font-bold text-white">Laili Brand</h4>
               <p className="leading-relaxed text-gray-300">
-                Platform kemitraan terpercaya untuk berkembang bersama
+                Ibu rumah tangga berdaya & berkarir dari rumah
               </p>
             </div>
             <div>
@@ -291,25 +291,6 @@ export default function LoginPage() {
                 <li className="text-gray-300">Email: info@laili.com</li>
                 <li className="text-gray-300">WhatsApp: 0812-xxxx-xxxx</li>
               </ul>
-            </div>
-            <div>
-              <h4 className="mb-3 font-bold text-white">Ikuti Kami</h4>
-              <div className="flex gap-3">
-                <a
-                  href="#"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl transition-transform hover:scale-110"
-                  aria-label="Instagram"
-                >
-                  📱
-                </a>
-                <a
-                  href="#"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl transition-transform hover:scale-110"
-                  aria-label="WhatsApp"
-                >
-                  💬
-                </a>
-              </div>
             </div>
           </div>
 

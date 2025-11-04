@@ -25,7 +25,7 @@ export default function HomePage() {
               className="mx-auto mb-8 max-w-2xl text-balance leading-relaxed"
               style={{ color: 'var(--primary-700)' }}
             >
-              Platform kemitraan yang memudahkan Anda mengelola bisnis, mengakses kelas online, dan berkembang bersama Laili Brand
+              Dunianya wanita berkarir dari rumah
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Link
@@ -160,11 +160,11 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="mb-8 grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-8 grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <h4 className="mb-3 font-bold text-white">Laili Brand</h4>
               <p className="leading-relaxed text-gray-300">
-                Ibu Berkarir dalam Dalam rumah
+                Ibu rumah tangga berdaya & berkarir dari rumah
               </p>
             </div>
             <div>
@@ -188,25 +188,6 @@ export default function HomePage() {
                 <li className="text-gray-300">Email: info@laili.com</li>
                 <li className="text-gray-300">WhatsApp: 0812-xxxx-xxxx</li>
               </ul>
-            </div>
-            <div>
-              <h4 className="mb-3 font-bold text-white">Ikuti Kami</h4>
-              <div className="flex gap-3">
-                <a
-                  href="#"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl transition-transform hover:scale-110"
-                  aria-label="Instagram"
-                >
-                  📱
-                </a>
-                <a
-                  href="#"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl transition-transform hover:scale-110"
-                  aria-label="WhatsApp"
-                >
-                  💬
-                </a>
-              </div>
             </div>
           </div>
 

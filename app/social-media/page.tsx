@@ -118,7 +118,7 @@ export default function SocialMediaPage() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <h4 className="mb-4 font-bold text-gray-900">Laili Brand</h4>
-              <p className="text-sm text-gray-600">Platform kemitraan terpercaya</p>
+              <p className="text-sm text-gray-600">Ibu rumah tangga berdaya & berkarir dari rumah</p>
             </div>
             <div>
               <h4 className="mb-4 font-bold text-gray-900">Informasi</h4>
@@ -132,13 +132,6 @@ export default function SocialMediaPage() {
               <ul className="space-y-2 text-sm">
                 <li className="text-gray-600">info@laili.com</li>
               </ul>
-            </div>
-            <div>
-              <h4 className="mb-4 font-bold text-gray-900">Ikuti Kami</h4>
-              <div className="flex gap-4">
-                <a href="#" className="text-gray-600 hover:text-gray-900">📱</a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">💬</a>
-              </div>
             </div>
           </div>
           <div className="mt-8 border-t border-gray-200 pt-8 text-center text-sm text-gray-600">

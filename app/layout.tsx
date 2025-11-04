@@ -16,7 +16,7 @@ const libreBaskerville = Libre_Baskerville({
 
 export const metadata: Metadata = {
   title: "Laili - Platform Mitra",
-  description: "Platform kemitraan yang memudahkan Anda mengelola bisnis, mengakses kelas online, dan berkembang bersama Laili Brand",
+  description: "Dunianya wanita berkarir dari rumah",
 };
 
 export default function RootLayout({

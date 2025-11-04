@@ -14,7 +14,7 @@ export default function ProfilPage() {
               Tentang Laili Brand
             </h1>
             <p className="text-lg text-gray-600">
-              Platform kemitraan terpercaya yang membantu mitra berkembang bersama
+              Ibu rumah tangga berdaya & berkarir dari rumah
             </p>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function ProfilPage() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <h4 className="mb-4 font-bold text-gray-900">Laili Brand</h4>
-              <p className="text-sm text-gray-600">Platform kemitraan terpercaya</p>
+              <p className="text-sm text-gray-600">Ibu rumah tangga berdaya & berkarir dari rumah</p>
             </div>
             <div>
               <h4 className="mb-4 font-bold text-gray-900">Informasi</h4>
