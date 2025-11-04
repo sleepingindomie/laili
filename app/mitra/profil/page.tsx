@@ -201,7 +201,7 @@ export default function MitraProfilPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="touch-target w-full rounded-lg bg-secondary-600 px-8 py-3 font-semibold text-white transition-colors hover:bg-secondary-700 disabled:opacity-50 disabled:cursor-not-allowed sm:w-auto"
+                className="touch-target w-full rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed sm:w-auto"
               >
                 {saving ? "Menyimpan..." : "Simpan Perubahan"}
               </button>
