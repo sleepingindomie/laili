@@ -105,7 +105,7 @@ export default function LoginPage() {
         <div className="mx-auto max-w-md">
           <div className="card bg-white p-6 sm:p-8">
             <div className="mb-6 flex justify-center">
-              <Logo width={100} height={32} />
+              <Logo width={80} height={32} />
             </div>
             <h1 className="mb-5 text-center">
               Masuk ke Akun Anda

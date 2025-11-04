@@ -40,25 +40,6 @@ export default function Footer() {
               <li className="text-gray-300">WhatsApp: 0812-3456-7890</li>
             </ul>
           </div>
-          <div>
-            <h4 className="mb-3 font-bold text-white">Ikuti Kami</h4>
-            <div className="flex gap-3">
-              <a
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl transition-transform hover:scale-110"
-                aria-label="Instagram"
-              >
-                📱
-              </a>
-              <a
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl transition-transform hover:scale-110"
-                aria-label="WhatsApp"
-              >
-                💬
-              </a>
-            </div>
-          </div>
         </div>
 
         <div
