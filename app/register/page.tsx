@@ -244,26 +244,54 @@ export default function RegisterPage() {
         }
       });
 
-      if (signUpError) throw signUpError;
+      if (signUpError) {
+        // Handle specific error cases
+        if (signUpError.message.includes('already registered')) {
+          throw new Error('Email sudah terdaftar. Silakan gunakan email lain atau login.');
+        }
+        throw signUpError;
+      }
 
       if (authData.user) {
-        // Create profile
-        const { error: profileError } = await supabase
+        // Wait a bit for auth trigger to complete
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Check if profile already exists (created by trigger)
+        const { data: existingProfile, error: checkError } = await supabase
           .from('profiles')
-          .insert({
-            id: authData.user.id,
-            email: formData.email,
-            nama_lengkap: formData.namaLengkap,
-            nomor_telepon: formData.nomorTelepon,
-            alamat: formData.alamat,
-          });
+          .select('id')
+          .eq('id', authData.user.id)
+          .single();
 
-        if (profileError) throw profileError;
+        // Only insert if profile doesn't exist yet
+        if (!existingProfile && !checkError) {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert({
+              id: authData.user.id,
+              email: formData.email,
+              nama_lengkap: formData.namaLengkap,
+              nomor_telepon: formData.nomorTelepon,
+              alamat: formData.alamat,
+            });
 
-        // Redirect to login page
-        router.push('/login?message=Registrasi berhasil! Silakan login.');
+          if (profileError && !profileError.message.includes('duplicate key')) {
+            console.error('Profile creation error:', profileError);
+            // Don't throw error here, profile might be created by trigger
+          }
+        }
+
+        // Check if email confirmation is required
+        if (authData.session) {
+          // User is automatically logged in (no email confirmation required)
+          router.push('/mitra/beranda');
+        } else {
+          // Email confirmation required
+          router.push('/login?message=Registrasi berhasil! Silakan cek email Anda untuk verifikasi.');
+        }
       }
     } catch (err: any) {
+      console.error('Registration error:', err);
       setError(err.message || "Terjadi kesalahan saat registrasi");
     } finally {
       setIsLoading(false);

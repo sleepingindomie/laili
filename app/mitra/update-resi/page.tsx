@@ -81,7 +81,19 @@ export default function UpdateResiPage() {
         .limit(20);
 
       if (completedError) throw completedError;
-      setCompletedOrders(completedData || []);
+
+      // Transform data to match TrackingResi interface
+      const transformedData = (completedData || []).map((item: any) => ({
+        ...item,
+        pesanan: Array.isArray(item.pesanan) ? {
+          ...item.pesanan[0],
+          profiles: Array.isArray(item.pesanan[0]?.profiles)
+            ? item.pesanan[0].profiles[0]
+            : item.pesanan[0]?.profiles
+        } : item.pesanan
+      }));
+
+      setCompletedOrders(transformedData);
 
     } catch (error) {
       console.error('Error fetching data:', error);
