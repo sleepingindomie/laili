@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, User, ShoppingBag, GraduationCap, Menu, X, ChevronDown, LogOut } from "lucide-react";
+import { Home, User, ShoppingBag, GraduationCap, ChevronDown, LogOut } from "lucide-react";
 import Logo from "@/components/Logo";
 import { createClient } from "@/lib/supabase/client";
 
@@ -12,7 +12,6 @@ export default function MitraLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isInfoDropdownOpen, setIsInfoDropdownOpen] = useState(false);
   const [userName, setUserName] = useState("Nama Bunda");
   const pathname = usePathname();
@@ -135,89 +134,8 @@ export default function MitraLayout({
                 <span>Keluar</span>
               </button>
             </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="touch-target text-gray-900 md:hidden"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="border-t border-gray-200 bg-white md:hidden">
-            <div className="container-responsive py-4">
-              <div className="space-y-2">
-                {navigation.map((item) => {
-                  const isActive = pathname === item.href;
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex touch-target items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
-                        isActive
-                          ? "bg-secondary-50 text-secondary-600 font-semibold"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      <span>{item.name}</span>
-                    </Link>
-                  );
-                })}
-
-                {/* Info Dropdown - Mobile */}
-                <div className="border-t border-gray-200 pt-2">
-                  <button
-                    onClick={() => setIsInfoDropdownOpen(!isInfoDropdownOpen)}
-                    className="flex w-full touch-target items-center justify-between rounded-lg px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  >
-                    <span>Info</span>
-                    <ChevronDown className={`h-4 w-4 transition-transform ${isInfoDropdownOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {isInfoDropdownOpen && (
-                    <div className="ml-4 mt-2 space-y-1">
-                      {infoMenuItems.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => {
-                            setIsInfoDropdownOpen(false);
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="block touch-target rounded-lg px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Logout Button - Mobile */}
-                <div className="border-t border-gray-200 pt-2">
-                  <button
-                    onClick={handleLogout}
-                    className="flex w-full touch-target items-center gap-3 rounded-lg px-4 py-3 text-red-600 hover:bg-red-50"
-                  >
-                    <LogOut className="h-5 w-5" />
-                    <span>Keluar</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* Main Content */}

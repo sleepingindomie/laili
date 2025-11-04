@@ -3,11 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Logo from "@/components/Logo";
 
 export default function Navigation() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMitraDropdownOpen, setIsMitraDropdownOpen] = useState(false);
   const pathname = usePathname();
 
@@ -92,85 +91,8 @@ export default function Navigation() {
               Login
             </Link>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="touch-target text-gray-900 md:hidden"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="border-t border-gray-200 bg-white md:hidden">
-          <div className="container-responsive py-4">
-            <div className="space-y-2">
-              {navigation.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block touch-target rounded-lg px-4 py-3 transition-colors ${
-                      isActive
-                        ? "bg-gray-100 text-gray-900 font-semibold"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
-
-              {/* Mitra Dropdown - Mobile */}
-              <div className="border-t border-gray-200 pt-2">
-                <button
-                  onClick={() => setIsMitraDropdownOpen(!isMitraDropdownOpen)}
-                  className="flex w-full touch-target items-center justify-between rounded-lg px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                >
-                  <span>Mitra</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${isMitraDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-
-                {isMitraDropdownOpen && (
-                  <div className="ml-4 mt-2 space-y-1">
-                    {mitraMenuItems.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => {
-                          setIsMitraDropdownOpen(false);
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="block touch-target rounded-lg px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <Link
-                href="/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block touch-target rounded-lg bg-gray-900 px-4 py-3 text-center text-white transition-colors hover:bg-gray-800"
-              >
-                Login
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
     </nav>
   );
 }
