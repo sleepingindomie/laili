@@ -74,14 +74,21 @@ export default function HadiahPage() {
           poin_digunakan,
           status,
           tanggal_penukaran,
-          hadiah:hadiah_id (nama)
+          hadiah!penukaran_hadiah_hadiah_id_fkey (nama)
         `)
         .eq('user_id', user.id)
         .order('tanggal_penukaran', { ascending: false })
         .limit(10);
 
       if (riwayatError) throw riwayatError;
-      setRiwayatPenukaran(riwayatData || []);
+
+      // Transform data to match PenukaranHadiah interface
+      const transformedData = (riwayatData || []).map((item: any) => ({
+        ...item,
+        hadiah: Array.isArray(item.hadiah) ? item.hadiah[0] : item.hadiah
+      }));
+
+      setRiwayatPenukaran(transformedData);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -217,7 +224,7 @@ export default function HadiahPage() {
           className="rounded-lg border border-gray-300 px-4 py-3 focus:border-secondary-500 focus:outline-none focus:ring-2 focus:ring-secondary-200"
         >
           {kategoris.map((kategori) => (
-            <option key={kategori} value={kategori}>{kategori}</option>
+            <option key={kategori || 'all'} value={kategori || 'Semua Kategori'}>{kategori}</option>
           ))}
         </select>
       </div>
