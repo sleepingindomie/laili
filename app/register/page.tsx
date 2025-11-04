@@ -549,7 +549,7 @@ export default function RegisterPage() {
               <div>
                 <h4 className="mb-3 font-bold text-white">Laili Brand</h4>
                 <p className="leading-relaxed text-gray-300">
-                  Ibu Berkarir dalam Dalam rumah
+                  Ibu Berkarir dalam rumah
                 </p>
               </div>
             </div>
