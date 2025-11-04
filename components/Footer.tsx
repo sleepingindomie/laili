@@ -15,7 +15,7 @@ export default function Footer() {
           <div>
             <h4 className="mb-3 font-bold text-white">Laili Brand</h4>
             <p className="leading-relaxed text-gray-300">
-              Platform kemitraan terpercaya untuk berkembang bersama
+              Ibu Berkarir dalam Dalam rumah
             </p>
           </div>
           <div>
@@ -37,7 +37,7 @@ export default function Footer() {
             <h4 className="mb-3 font-bold text-white">Kontak</h4>
             <ul className="space-y-2">
               <li className="text-gray-300">Email: info@laili.com</li>
-              <li className="text-gray-300">WhatsApp: 0812-xxxx-xxxx</li>
+              <li className="text-gray-300">WhatsApp: 0812-3456-7890</li>
             </ul>
           </div>
           <div>

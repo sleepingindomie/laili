@@ -221,7 +221,7 @@ export default function HomePage() {
             <div>
               <h4 className="mb-3 font-bold text-white">Laili Brand</h4>
               <p className="leading-relaxed text-gray-300">
-                Platform kemitraan terpercaya untuk berkembang bersama
+                Ibu Berkarir dalam Dalam rumah
               </p>
             </div>
             <div>

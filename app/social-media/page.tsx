@@ -12,14 +12,6 @@ export default function SocialMediaPage() {
       description: "Follow untuk update produk dan tips bisnis terbaru"
     },
     {
-      name: "Facebook",
-      handle: "Laili Brand Official",
-      url: "#",
-      icon: Facebook,
-      color: "from-blue-600 to-blue-700",
-      description: "Join komunitas mitra Laili di Facebook"
-    },
-    {
       name: "WhatsApp",
       handle: "+62 812-xxxx-xxxx",
       url: "#",

@@ -1,18 +1,16 @@
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 export default function ProfilPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
-        <div className="container-responsive py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-900">
-                <span className="text-xl font-bold text-white">L</span>
-              </div>
-              <span className="hidden text-xl font-bold text-gray-900 sm:block">Laili</span>
-            </Link>
+        <div className="min-h-screen" style={{ background: 'var(--accent-warm)' }}>
+              {/* Navigation */}
+              <nav className="sticky top-0 z-50 bg-white shadow-md">
+                <div className="container-responsive py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Logo width={120} height={38} priority />
+                    </div>
 
             <div className="hidden items-center gap-6 md:flex">
               <Link href="/" className="text-gray-600 transition-colors hover:text-gray-900">
