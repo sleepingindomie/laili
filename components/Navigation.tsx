@@ -1,39 +1,36 @@
 // components/Navigation.tsx
 "use client";
 
-import { useState, useCallback, FC } from "react";
+import { useState, useCallback, useEffect, FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
 
-// 1. DEFINISI INTERFACE UNTUK TIPE DATA NAVIGASI
-// Ini menentukan struktur yang harus dimiliki oleh setiap item navigasi.
+// --- INTERFACES ---
 interface NavItem {
   name: string;
   href: string;
 }
 
-// 2. DEFINISI INTERFACE UNTUK PROPS KOMPONEN NavLink
 interface NavLinkProps {
   item: NavItem;
   isMobile?: boolean;
 }
 
-// 3. KOMPONEN TAUTAN NAVIGASI REUSABLE
-// Tipe data NavLinkProps diterapkan di sini.
+// --- SUB-KOMPONEN ---
+
+// Komponen Tautan Navigasi Reusable
 const NavLink: FC<NavLinkProps> = ({ item, isMobile = false }) => {
   const pathname = usePathname();
   const isActive = pathname === item.href;
   
   const baseClasses = "font-medium transition-colors";
   
-  // Kelas tampilan Desktop
   const desktopClasses = `${baseClasses} ${
     isActive ? "text-gray-900 font-semibold" : "text-gray-600 hover:text-gray-900"
   }`;
   
-  // Kelas tampilan Mobile
   const mobileClasses = `block px-4 py-2 rounded-md ${
     isActive ? "bg-gray-100 text-gray-900 font-semibold" : "text-gray-700 hover:bg-gray-50"
   }`;
@@ -42,7 +39,7 @@ const NavLink: FC<NavLinkProps> = ({ item, isMobile = false }) => {
     <Link
       key={item.name}
       href={item.href}
-      // Di Mobile, kami ingin menu tertutup setelah klik
+      // Trigger event global untuk menutup menu setelah navigasi
       onClick={isMobile ? () => document.dispatchEvent(new Event('close-all-menus')) : undefined}
       className={isMobile ? mobileClasses : desktopClasses}
     >
@@ -51,13 +48,11 @@ const NavLink: FC<NavLinkProps> = ({ item, isMobile = false }) => {
   );
 };
 
-// 4. KOMPONEN UTAMA NAVIGATION
+// --- KOMPONEN UTAMA NAVIGATION ---
 export default function Navigation() {
   const pathname = usePathname();
   
-  // State untuk menu Desktop/Mitra
   const [isMitraDropdownOpen, setIsMitraDropdownOpen] = useState(false);
-  // State untuk menu Mobile (Hamburger)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
 
   // Fungsi utilitas untuk menutup semua menu
@@ -66,15 +61,22 @@ export default function Navigation() {
     setIsMobileMenuOpen(false);
   }, []);
 
-  // Efek untuk menangani event global penutup menu (dari NavLink)
-  // Ini adalah cara yang lebih baik daripada passing prop terlalu dalam.
-  useState(() => {
-    const handleClose = () => closeAllMenus();
-    document.addEventListener('close-all-menus', handleClose);
-    return () => document.removeEventListener('close-all-menus', handleClose);
-  });
+  // ⭐ PERBAIKAN ERROR SERVER-SIDE: Menggunakan useEffect untuk interaksi DOM
+  useEffect(() => {
+    // Memastikan kode hanya berjalan di browser
+    if (typeof window !== 'undefined' && document) {
+        const handleClose = () => closeAllMenus();
+        
+        // Menambahkan listener untuk event penutup menu dari NavLink
+        document.addEventListener('close-all-menus', handleClose);
+
+        return () => {
+            document.removeEventListener('close-all-menus', handleClose);
+        };
+    }
+  }, [closeAllMenus]);
   
-  // Terapkan NavItem[] pada array navigasi
+  // Data Navigasi
   const navigation: NavItem[] = [
     { name: "Beranda", href: "/" },
     { name: "Profil", href: "/profil" },
@@ -82,7 +84,6 @@ export default function Navigation() {
     { name: "Brand", href: "/brand" },
   ];
 
-  // Terapkan NavItem[] pada array menu Mitra
   const mitraMenuItems: NavItem[] = [
     { name: "Testimoni Mitra", href: "/login" },
     { name: "Kelas Online", href: "/login" },
