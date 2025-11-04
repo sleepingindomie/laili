@@ -185,7 +185,7 @@ export default function Navigation() {
           </button>
 
           {/* 1. Navigasi Desktop (Hidden di Mobile) */}
-          <div className="hidden items-center gap-6 md:flex">
+          <div className="md:hidden items-center gap-6 md:flex">
             {navigation.map((item) => (
               <NavLink key={item.name} item={item} />
             ))}
@@ -205,7 +205,7 @@ export default function Navigation() {
 
       {/* 2. Menu Mobile Drawer (Hidden di Desktop) */}
       {isMobileMenuOpen && (
-        <div className="hidden bg-white shadow-lg pb-4 border-t border-gray-100">
+        <div className="md:hidden bg-white shadow-lg pb-4 border-t border-gray-100">
           <div className="flex flex-col space-y-1 px-4 pt-3">
             
             {/* Tautan Navigasi Mobile */}
