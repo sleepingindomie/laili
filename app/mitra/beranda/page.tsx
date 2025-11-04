@@ -1,4 +1,73 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+
 export default function MitraBerandaPage() {
+  const [stats, setStats] = useState({
+    totalSales: 0,
+    totalPoints: 0,
+    activeOrders: 0,
+    availableClasses: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const currentMonth = new Date().toISOString().slice(0, 7);
+
+        const [salesData, pointsData, ordersData, classesData] = await Promise.all([
+          supabase
+            .from('sales')
+            .select('total_amount')
+            .eq('user_id', user.id)
+            .eq('month', currentMonth)
+            .single(),
+          supabase
+            .from('points')
+            .select('total_points')
+            .eq('user_id', user.id)
+            .single(),
+          supabase
+            .from('orders')
+            .select('id', { count: 'exact' })
+            .eq('user_id', user.id)
+            .eq('status', 'active'),
+          supabase
+            .from('classes')
+            .select('id', { count: 'exact' })
+            .eq('status', 'available'),
+        ]);
+
+        setStats({
+          totalSales: salesData.data?.total_amount || 0,
+          totalPoints: pointsData.data?.total_points || 0,
+          activeOrders: ordersData.count || 0,
+          availableClasses: classesData.count || 0,
+        });
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
   return (
     <div className="container-responsive py-8">
       <div className="mb-8">
@@ -10,25 +79,33 @@ export default function MitraBerandaPage() {
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-xl bg-white p-6 shadow-md">
           <div className="mb-2 text-sm font-medium text-gray-600">Total Penjualan</div>
-          <div className="text-2xl font-bold text-secondary-600">Rp 0</div>
+          <div className="text-2xl font-bold text-secondary-600">
+            {loading ? "..." : formatCurrency(stats.totalSales)}
+          </div>
           <div className="mt-2 text-xs text-gray-500">Bulan ini</div>
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow-md">
           <div className="mb-2 text-sm font-medium text-gray-600">Poin Anda</div>
-          <div className="text-2xl font-bold text-secondary-600">0</div>
+          <div className="text-2xl font-bold text-secondary-600">
+            {loading ? "..." : stats.totalPoints.toLocaleString('id-ID')}
+          </div>
           <div className="mt-2 text-xs text-gray-500">Total poin terkumpul</div>
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow-md">
           <div className="mb-2 text-sm font-medium text-gray-600">Order Aktif</div>
-          <div className="text-2xl font-bold text-secondary-600">0</div>
+          <div className="text-2xl font-bold text-secondary-600">
+            {loading ? "..." : stats.activeOrders}
+          </div>
           <div className="mt-2 text-xs text-gray-500">Pesanan dalam proses</div>
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow-md">
           <div className="mb-2 text-sm font-medium text-gray-600">Kelas Tersedia</div>
-          <div className="text-2xl font-bold text-secondary-600">0</div>
+          <div className="text-2xl font-bold text-secondary-600">
+            {loading ? "..." : stats.availableClasses}
+          </div>
           <div className="mt-2 text-xs text-gray-500">Video pembelajaran baru</div>
         </div>
       </div>

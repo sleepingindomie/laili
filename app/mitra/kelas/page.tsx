@@ -1,40 +1,79 @@
-export default function MitraKelasPage() {
-  const classes = [
-    {
-      id: 1,
-      title: "Kelas Pengenalan Produk Laili",
-      instructor: "Tim Laili",
-      duration: "45 menit",
-      type: "Video",
-      status: "Tersedia",
-    },
-    {
-      id: 2,
-      title: "Strategi Marketing Digital",
-      instructor: "Coach Sarah",
-      duration: "60 menit",
-      type: "Video",
-      status: "Tersedia",
-    },
-    {
-      id: 3,
-      title: "Tips Closing Penjualan",
-      instructor: "Coach Dina",
-      duration: "30 menit",
-      type: "Video",
-      status: "Segera",
-    },
-  ];
+"use client";
 
-  const upcomingCoaching = [
-    {
-      id: 1,
-      title: "Coaching Session - Januari 2025",
-      date: "15 Januari 2025",
-      time: "19:00 WIB",
-      coach: "Coach Mentor",
-    },
-  ];
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+
+interface Class {
+  id: number;
+  title: string;
+  instructor: string;
+  duration: string;
+  type: string;
+  status: string;
+}
+
+interface CoachingSession {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  coach: string;
+}
+
+export default function MitraKelasPage() {
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [upcomingCoaching, setUpcomingCoaching] = useState<CoachingSession[]>([]);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [classesData, coachingData] = await Promise.all([
+          supabase
+            .from('classes')
+            .select('*')
+            .order('created_at', { ascending: false }),
+          supabase
+            .from('coaching_sessions')
+            .select('*')
+            .gte('date', new Date().toISOString().split('T')[0])
+            .order('date', { ascending: true }),
+        ]);
+
+        if (classesData.data) {
+          setClasses(classesData.data.map(cls => ({
+            id: cls.id,
+            title: cls.title,
+            instructor: cls.instructor,
+            duration: cls.duration,
+            type: cls.type,
+            status: cls.status === 'available' ? 'Tersedia' : 'Segera',
+          })));
+        }
+
+        if (coachingData.data) {
+          setUpcomingCoaching(coachingData.data.map(session => ({
+            id: session.id,
+            title: session.title,
+            date: new Date(session.date).toLocaleDateString('id-ID', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            }),
+            time: session.time,
+            coach: session.coach,
+          })));
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="container-responsive py-8">
@@ -50,8 +89,13 @@ export default function MitraKelasPage() {
         <h2 className="mb-4 text-xl font-semibold text-gray-800">
           Jadwal Coaching Mendatang
         </h2>
-        <div className="space-y-4">
-          {upcomingCoaching.map((session) => (
+        {loading ? (
+          <div className="text-center py-8 text-gray-500">Memuat data...</div>
+        ) : upcomingCoaching.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">Belum ada jadwal coaching mendatang</div>
+        ) : (
+          <div className="space-y-4">
+            {upcomingCoaching.map((session) => (
             <div
               key={session.id}
               className="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md sm:flex-row sm:items-center sm:justify-between"
@@ -73,7 +117,8 @@ export default function MitraKelasPage() {
               </button>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Video Classes */}
@@ -81,8 +126,13 @@ export default function MitraKelasPage() {
         <h2 className="mb-4 text-xl font-semibold text-gray-800">
           Video Kelas Online
         </h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {classes.map((cls) => (
+        {loading ? (
+          <div className="text-center py-8 text-gray-500">Memuat data...</div>
+        ) : classes.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">Belum ada kelas tersedia</div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {classes.map((cls) => (
             <div
               key={cls.id}
               className="overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg"
@@ -118,7 +168,8 @@ export default function MitraKelasPage() {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

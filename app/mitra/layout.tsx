@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, User, ShoppingBag, GraduationCap, Menu, X, ChevronDown } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Home, User, ShoppingBag, GraduationCap, Menu, X, ChevronDown, LogOut } from "lucide-react";
+import Logo from "@/components/Logo";
+import { createClient } from "@/lib/supabase/client";
 
 export default function MitraLayout({
   children,
@@ -12,7 +14,28 @@ export default function MitraLayout({
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isInfoDropdownOpen, setIsInfoDropdownOpen] = useState(false);
+  const [userName, setUserName] = useState("Nama Bunda");
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClient();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: userData } = await supabase
+          .from('users')
+          .select('full_name')
+          .eq('id', user.id)
+          .single();
+
+        if (userData?.full_name) {
+          setUserName(userData.full_name);
+        }
+      }
+    };
+    getUser();
+  }, []);
 
   const navigation = [
     { name: "Beranda", href: "/mitra/beranda", icon: Home },
@@ -31,22 +54,21 @@ export default function MitraLayout({
     { name: "Update Resi", href: "/mitra/update-resi" },
   ];
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary-50 to-white">
       {/* Top Navigation - Desktop & Mobile */}
-      <nav className="sticky top-0 z-50 bg-secondary-500 shadow-md">
+      <nav className="sticky top-0 z-50 bg-white shadow-md">
         <div className="container-responsive py-4">
           <div className="flex items-center justify-between">
-            {/* Logo & Partner Name */}
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
-                <span className="text-xl font-bold text-secondary-500">M</span>
-              </div>
-              <div className="hidden sm:block">
-                <p className="text-sm font-medium text-white">Nama Bunda</p>
-                <p className="text-xs text-secondary-100">Mitra Laili</p>
-              </div>
-            </div>
+            {/* Logo */}
+            <Link href="/mitra/beranda" className="flex items-center">
+              <Logo width={120} height={38} />
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden items-center gap-6 md:flex">
@@ -56,10 +78,10 @@ export default function MitraLayout({
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`flex items-center gap-2 transition-colors ${
+                    className={`flex items-center gap-2 font-medium transition-colors ${
                       isActive
-                        ? "text-white font-semibold"
-                        : "text-secondary-100 hover:text-white"
+                        ? "text-gray-900"
+                        : "text-gray-600 hover:text-gray-900"
                     }`}
                   >
                     <item.icon className="h-5 w-5" />
@@ -72,7 +94,7 @@ export default function MitraLayout({
               <div className="relative">
                 <button
                   onClick={() => setIsInfoDropdownOpen(!isInfoDropdownOpen)}
-                  className="flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-white transition-colors hover:bg-white/20"
+                  className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50"
                 >
                   <span>Info</span>
                   <ChevronDown className={`h-4 w-4 transition-transform ${isInfoDropdownOpen ? 'rotate-180' : ''}`} />
@@ -84,13 +106,13 @@ export default function MitraLayout({
                       className="fixed inset-0 z-10"
                       onClick={() => setIsInfoDropdownOpen(false)}
                     />
-                    <div className="absolute right-0 z-20 mt-2 w-56 rounded-lg bg-white shadow-lg">
+                    <div className="absolute right-0 z-20 mt-2 w-56 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                       {infoMenuItems.map((item, index) => (
                         <Link
                           key={item.name}
                           href={item.href}
                           onClick={() => setIsInfoDropdownOpen(false)}
-                          className={`block px-4 py-3 text-gray-700 hover:bg-secondary-50 ${
+                          className={`block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 ${
                             index === 0 ? 'rounded-t-lg' : ''
                           } ${index === infoMenuItems.length - 1 ? 'rounded-b-lg' : ''}`}
                         >
@@ -101,12 +123,21 @@ export default function MitraLayout({
                   </>
                 )}
               </div>
+
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2 font-medium text-white transition-colors hover:bg-gray-800"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Keluar</span>
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="touch-target text-white md:hidden"
+              className="touch-target text-gray-900 md:hidden"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
@@ -120,7 +151,7 @@ export default function MitraLayout({
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="border-t border-secondary-400 bg-secondary-500 md:hidden">
+          <div className="border-t border-gray-200 bg-white md:hidden">
             <div className="container-responsive py-4">
               <div className="space-y-2">
                 {navigation.map((item) => {
@@ -132,8 +163,8 @@ export default function MitraLayout({
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={`flex touch-target items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
                         isActive
-                          ? "bg-white/20 text-white font-semibold"
-                          : "text-secondary-100 hover:bg-white/10 hover:text-white"
+                          ? "bg-gray-100 text-gray-900 font-semibold"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                       }`}
                     >
                       <item.icon className="h-5 w-5" />
@@ -143,10 +174,10 @@ export default function MitraLayout({
                 })}
 
                 {/* Info Dropdown - Mobile */}
-                <div className="border-t border-secondary-400 pt-2">
+                <div className="border-t border-gray-200 pt-2">
                   <button
                     onClick={() => setIsInfoDropdownOpen(!isInfoDropdownOpen)}
-                    className="flex w-full touch-target items-center justify-between rounded-lg px-4 py-3 text-secondary-100 hover:bg-white/10 hover:text-white"
+                    className="flex w-full touch-target items-center justify-between rounded-lg px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   >
                     <span>Info</span>
                     <ChevronDown className={`h-4 w-4 transition-transform ${isInfoDropdownOpen ? 'rotate-180' : ''}`} />
@@ -162,13 +193,24 @@ export default function MitraLayout({
                             setIsInfoDropdownOpen(false);
                             setIsMobileMenuOpen(false);
                           }}
-                          className="block touch-target rounded-lg px-4 py-3 text-sm text-secondary-100 hover:bg-white/10 hover:text-white"
+                          className="block touch-target rounded-lg px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                         >
                           {item.name}
                         </Link>
                       ))}
                     </div>
                   )}
+                </div>
+
+                {/* Logout Button - Mobile */}
+                <div className="border-t border-gray-200 pt-2">
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full touch-target items-center gap-3 rounded-lg px-4 py-3 text-red-600 hover:bg-red-50"
+                  >
+                    <LogOut className="h-5 w-5" />
+                    <span>Keluar</span>
+                  </button>
                 </div>
               </div>
             </div>
