@@ -63,37 +63,43 @@ export default function Navigation() {
 
   // ⭐ PERBAIKAN 1: Menangani penutup menu global dan SS
   useEffect(() => {
+    // Memastikan kode hanya berjalan di browser
     if (typeof window !== 'undefined' && document) {
-      const handleClose = () => closeAllMenus();
-      
-      document.addEventListener('close-all-menus', handleClose);
+        const handleClose = () => closeAllMenus();
+        
+        document.addEventListener('close-all-menus', handleClose);
 
-      return () => {
-        document.removeEventListener('close-all-menus', handleClose);
-      };
+        return () => {
+            document.removeEventListener('close-all-menus', handleClose);
+        };
     }
   }, [closeAllMenus]);
   
-  // ⭐ PERBAIKAN 2: Menutup menu mobile saat beralih ke tampilan desktop
+  // ⭐ PERBAIKAN 2: Logic yang lebih kuat untuk menutup menu mobile saat resize/desktop
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleResize = () => {
-        // Cek jika lebar viewport lebih besar dari breakpoint 'md' (768px secara default di Tailwind)
-        if (window.innerWidth >= 768) {
-          setIsMobileMenuOpen(false); // Tutup menu mobile
+    if (typeof window === 'undefined') return;
+
+    // Nilai default untuk breakpoint 'md' di Tailwind
+    const MD_BREAKPOINT = 768; 
+
+    const handleResize = () => {
+        // Jika lebar layar mencapai atau melebihi breakpoint MD, tutup menu mobile.
+        if (window.innerWidth >= MD_BREAKPOINT) {
+            setIsMobileMenuOpen(false); 
         }
-      };
+    };
 
-      window.addEventListener('resize', handleResize);
-      // Panggil sekali saat mount untuk mengatasi keadaan awal
-      handleResize();
+    // 1. Eksekusi saat komponen mount (untuk initial load di desktop)
+    handleResize();
 
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
-  }, []); // [] agar hanya berjalan saat mount
+    // 2. Tambahkan listener untuk perubahan ukuran
+    window.addEventListener('resize', handleResize);
 
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); // [] agar hanya berjalan saat mount dan unmount
+  
   // Data Navigasi
   const navigation: NavItem[] = [
     { name: "Beranda", href: "/" },
@@ -114,8 +120,8 @@ export default function Navigation() {
       <button
         onClick={() => {
             setIsMitraDropdownOpen(!isMitraDropdownOpen);
-            // Tambahkan ini untuk menutup menu mobile saat dropdown dibuka di mobile
-            if (isMobile) setIsMobileMenuOpen(false);
+            // Tutup menu mobile jika dropdown dibuka di mobile
+            if (isMobile) setIsMobileMenuOpen(false); 
         }}
         className={`flex items-center justify-between gap-2 transition-colors ${
             isMobile 

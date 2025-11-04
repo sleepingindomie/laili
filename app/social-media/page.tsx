@@ -91,24 +91,6 @@ export default function SocialMediaPage() {
                 );
               })}
             </div>
-
-            {/* Newsletter Section */}
-            <div className="mt-16 rounded-2xl bg-gray-900 p-8 text-center text-white sm:p-12">
-              <h2 className="mb-4 text-3xl font-bold">Dapatkan Update Terbaru</h2>
-              <p className="mb-8 text-gray-300">
-                Subscribe newsletter kami untuk mendapatkan tips bisnis, update produk, dan penawaran eksklusif
-              </p>
-              <form className="mx-auto flex max-w-md flex-col gap-4 sm:flex-row">
-                <input
-                  type="email"
-                  placeholder="Email Anda"
-                  className="flex-1 rounded-lg border-0 px-6 py-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-                />
-                <button className="touch-target rounded-lg bg-white px-8 py-4 font-semibold text-gray-900 transition-colors hover:bg-gray-100">
-                  Subscribe
-                </button>
-              </form>
-            </div>
           </div>
         </div>
       </section>
