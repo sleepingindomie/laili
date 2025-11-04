@@ -61,21 +61,39 @@ export default function Navigation() {
     setIsMobileMenuOpen(false);
   }, []);
 
-  // ⭐ PERBAIKAN ERROR SERVER-SIDE: Menggunakan useEffect untuk interaksi DOM
+  // ⭐ PERBAIKAN 1: Menangani penutup menu global dan SS
   useEffect(() => {
-    // Memastikan kode hanya berjalan di browser
     if (typeof window !== 'undefined' && document) {
-        const handleClose = () => closeAllMenus();
-        
-        // Menambahkan listener untuk event penutup menu dari NavLink
-        document.addEventListener('close-all-menus', handleClose);
+      const handleClose = () => closeAllMenus();
+      
+      document.addEventListener('close-all-menus', handleClose);
 
-        return () => {
-            document.removeEventListener('close-all-menus', handleClose);
-        };
+      return () => {
+        document.removeEventListener('close-all-menus', handleClose);
+      };
     }
   }, [closeAllMenus]);
   
+  // ⭐ PERBAIKAN 2: Menutup menu mobile saat beralih ke tampilan desktop
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        // Cek jika lebar viewport lebih besar dari breakpoint 'md' (768px secara default di Tailwind)
+        if (window.innerWidth >= 768) {
+          setIsMobileMenuOpen(false); // Tutup menu mobile
+        }
+      };
+
+      window.addEventListener('resize', handleResize);
+      // Panggil sekali saat mount untuk mengatasi keadaan awal
+      handleResize();
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, []); // [] agar hanya berjalan saat mount
+
   // Data Navigasi
   const navigation: NavItem[] = [
     { name: "Beranda", href: "/" },
@@ -94,7 +112,11 @@ export default function Navigation() {
   const MitraDropdown: FC<{ isMobile?: boolean }> = ({ isMobile = false }) => (
     <div className={isMobile ? "" : "relative"}>
       <button
-        onClick={() => setIsMitraDropdownOpen(!isMitraDropdownOpen)}
+        onClick={() => {
+            setIsMitraDropdownOpen(!isMitraDropdownOpen);
+            // Tambahkan ini untuk menutup menu mobile saat dropdown dibuka di mobile
+            if (isMobile) setIsMobileMenuOpen(false);
+        }}
         className={`flex items-center justify-between gap-2 transition-colors ${
             isMobile 
                 ? 'w-full px-4 py-2 rounded-md font-medium text-gray-700 hover:bg-gray-50'
@@ -147,7 +169,10 @@ export default function Navigation() {
           {/* Tombol Hamburger (Mobile Only) */}
           <button
             className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors touch-target"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={() => {
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+                setIsMitraDropdownOpen(false); // Pastikan dropdown mitra tertutup saat membuka/menutup menu utama
+            }}
             aria-label="Toggle Mobile Menu"
           >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -163,6 +188,7 @@ export default function Navigation() {
 
             <Link
               href="/login"
+              onClick={closeAllMenus}
               className="touch-target rounded-lg bg-gray-900 px-6 py-2 text-white transition-colors hover:bg-gray-800"
             >
               Login
