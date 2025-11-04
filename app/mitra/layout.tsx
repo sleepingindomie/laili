@@ -81,7 +81,7 @@ export default function MitraLayout({
                       href={item.href}
                       className={`flex items-center gap-2 font-medium transition-colors ${
                         isActive
-                          ? "text-gray-900"
+                          ? "text-secondary-600 font-semibold"
                           : "text-gray-600 hover:text-gray-900"
                       }`}
                     >
@@ -165,7 +165,7 @@ export default function MitraLayout({
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={`flex touch-target items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
                         isActive
-                          ? "bg-gray-100 text-gray-900 font-semibold"
+                          ? "bg-secondary-50 text-secondary-600 font-semibold"
                           : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                       }`}
                     >
