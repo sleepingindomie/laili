@@ -21,32 +21,27 @@ export default function MitraBerandaPage() {
 
         const currentMonth = new Date().toISOString().slice(0, 7);
 
-        const [salesData, pointsData, ordersData, classesData] = await Promise.all([
+        const [pointsData, ordersData, classesData] = await Promise.all([
           supabase
-            .from('sales')
-            .select('total_amount')
-            .eq('user_id', user.id)
-            .eq('month', currentMonth)
-            .single(),
+            .from('poin')
+            .select('jumlah')
+            .eq('user_id', user.id),
           supabase
-            .from('points')
-            .select('total_points')
-            .eq('user_id', user.id)
-            .single(),
-          supabase
-            .from('orders')
+            .from('pesanan')
             .select('id', { count: 'exact' })
             .eq('user_id', user.id)
-            .eq('status', 'active'),
+            .eq('status', 'proses'),
           supabase
-            .from('classes')
-            .select('id', { count: 'exact' })
-            .eq('status', 'available'),
+            .from('kelas_video')
+            .select('id', { count: 'exact' }),
         ]);
 
+        // Calculate total points from all point records
+        const totalPoints = pointsData.data?.reduce((sum, record) => sum + (record.jumlah || 0), 0) || 0;
+
         setStats({
-          totalSales: salesData.data?.total_amount || 0,
-          totalPoints: pointsData.data?.total_points || 0,
+          totalSales: 0, // Will be calculated from pesanan
+          totalPoints: totalPoints,
           activeOrders: ordersData.count || 0,
           availableClasses: classesData.count || 0,
         });

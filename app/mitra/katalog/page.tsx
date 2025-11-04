@@ -5,11 +5,11 @@ import { createClient } from "@/lib/supabase/client";
 
 interface Product {
   id: number;
-  name: string;
-  price: number;
-  image_url: string | null;
-  stock_status: string;
-  category: string | null;
+  nama: string;
+  harga: number;
+  gambar_url: string | null;
+  kategori: string | null;
+  deskripsi: string | null;
 }
 
 export default function MitraKatalogPage() {
@@ -25,7 +25,7 @@ export default function MitraKatalogPage() {
     const fetchProducts = async () => {
       try {
         const { data, error } = await supabase
-          .from('products')
+          .from('produk')
           .select('*')
           .order('created_at', { ascending: false });
 
@@ -36,7 +36,7 @@ export default function MitraKatalogPage() {
           setFilteredProducts(data);
 
           const uniqueCategories = Array.from(
-            new Set(data.map(p => p.category).filter(Boolean))
+            new Set(data.map(p => p.kategori).filter(Boolean))
           ) as string[];
           setCategories(uniqueCategories);
         }
@@ -55,12 +55,12 @@ export default function MitraKatalogPage() {
 
     if (searchQuery) {
       filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        product.nama.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     if (selectedCategory !== "all") {
-      filtered = filtered.filter(product => product.category === selectedCategory);
+      filtered = filtered.filter(product => product.kategori === selectedCategory);
     }
 
     setFilteredProducts(filtered);
@@ -72,19 +72,6 @@ export default function MitraKatalogPage() {
       currency: 'IDR',
       minimumFractionDigits: 0,
     }).format(amount);
-  };
-
-  const getStockStatusText = (status: string) => {
-    switch (status) {
-      case 'available':
-        return 'Tersedia';
-      case 'limited':
-        return 'Terbatas';
-      case 'out_of_stock':
-        return 'Habis';
-      default:
-        return 'Tersedia';
-    }
   };
 
   return (
@@ -134,10 +121,10 @@ export default function MitraKatalogPage() {
               className="overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg"
             >
               <div className="flex h-48 items-center justify-center bg-gradient-to-br from-secondary-100 to-secondary-50">
-                {product.image_url ? (
+                {product.gambar_url ? (
                   <img
-                    src={product.image_url}
-                    alt={product.name}
+                    src={product.gambar_url}
+                    alt={product.nama}
                     className="h-full w-full object-cover"
                   />
                 ) : (
@@ -145,31 +132,22 @@ export default function MitraKatalogPage() {
                 )}
               </div>
               <div className="p-6">
-                <h3 className="mb-2 text-lg font-semibold text-gray-800">{product.name}</h3>
+                <h3 className="mb-2 text-lg font-semibold text-gray-800">{product.nama}</h3>
+                {product.deskripsi && (
+                  <p className="mb-2 text-sm text-gray-600 line-clamp-2">{product.deskripsi}</p>
+                )}
                 <p className="mb-4 text-2xl font-bold text-secondary-600">
-                  {formatCurrency(product.price)}
+                  {formatCurrency(product.harga)}
                 </p>
                 <div className="mb-4 flex items-center justify-between">
-                  <span
-                    className={`text-sm font-medium ${
-                      product.stock_status === "available"
-                        ? "text-green-600"
-                        : product.stock_status === "limited"
-                        ? "text-orange-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {getStockStatusText(product.stock_status)}
-                  </span>
-                  {product.category && (
-                    <span className="text-xs text-gray-500">{product.category}</span>
+                  {product.kategori && (
+                    <span className="rounded-full bg-secondary-100 px-3 py-1 text-xs font-medium text-secondary-700">{product.kategori}</span>
                   )}
                 </div>
                 <button
-                  className="touch-target w-full rounded-lg bg-secondary-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-secondary-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={product.stock_status === "out_of_stock"}
+                  className="touch-target w-full rounded-lg bg-secondary-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-secondary-600"
                 >
-                  {product.stock_status === "out_of_stock" ? "Stok Habis" : "Pesan Sekarang"}
+                  Pesan Sekarang
                 </button>
               </div>
             </div>

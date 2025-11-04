@@ -105,11 +105,11 @@ export default function LoginPage() {
         <div className="mx-auto max-w-md">
           <div className="card bg-white p-6 sm:p-8">
             <div className="mb-6 flex justify-center">
-              <Logo width={80} height={32} />
+              <Logo width={100} height={32} />
             </div>
-            <h1 className="mb-5 text-center">
+            <h2 className="mb-5 text-center text-2xl font-semibold text-gray-800">
               Masuk ke Akun Anda
-            </h1>
+            </h2>
 
             {error && (
               <div className="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-600">
@@ -242,6 +242,13 @@ export default function LoginPage() {
               <p>
                 Password minimal 8 karakter, mengandung huruf kapital dan kecil, serta angka
               </p>
+            </div>
+
+            <div className="mt-6 text-center text-sm text-gray-600">
+              Belum punya akun?{" "}
+              <Link href="/register" className="font-semibold text-secondary-600 hover:text-secondary-700">
+                Daftar di sini
+              </Link>
             </div>
           </div>
         </div>

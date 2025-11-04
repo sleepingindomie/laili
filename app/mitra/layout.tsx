@@ -23,13 +23,13 @@ export default function MitraLayout({
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: userData } = await supabase
-          .from('users')
-          .select('full_name')
+          .from('profiles')
+          .select('nama_lengkap')
           .eq('id', user.id)
           .single();
 
-        if (userData?.full_name) {
-          setUserName(userData.full_name);
+        if (userData?.nama_lengkap) {
+          setUserName(userData.nama_lengkap);
         }
       }
     };

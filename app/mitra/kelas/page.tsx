@@ -31,38 +31,38 @@ export default function MitraKelasPage() {
       try {
         const [classesData, coachingData] = await Promise.all([
           supabase
-            .from('classes')
+            .from('kelas_video')
             .select('*')
             .order('created_at', { ascending: false }),
           supabase
-            .from('coaching_sessions')
+            .from('coaching_schedule')
             .select('*')
-            .gte('date', new Date().toISOString().split('T')[0])
-            .order('date', { ascending: true }),
+            .gte('tanggal', new Date().toISOString().split('T')[0])
+            .order('tanggal', { ascending: true }),
         ]);
 
         if (classesData.data) {
           setClasses(classesData.data.map(cls => ({
             id: cls.id,
-            title: cls.title,
-            instructor: cls.instructor,
-            duration: cls.duration,
-            type: cls.type,
-            status: cls.status === 'available' ? 'Tersedia' : 'Segera',
+            title: cls.judul || '',
+            instructor: cls.instruktur || '',
+            duration: cls.durasi || '',
+            type: cls.tipe || '',
+            status: 'Tersedia',
           })));
         }
 
         if (coachingData.data) {
           setUpcomingCoaching(coachingData.data.map(session => ({
             id: session.id,
-            title: session.title,
-            date: new Date(session.date).toLocaleDateString('id-ID', {
+            title: session.judul || '',
+            date: new Date(session.tanggal).toLocaleDateString('id-ID', {
               day: 'numeric',
               month: 'long',
               year: 'numeric',
             }),
-            time: session.time,
-            coach: session.coach,
+            time: session.waktu || '',
+            coach: session.pembicara || '',
           })));
         }
       } catch (error) {

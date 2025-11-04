@@ -23,7 +23,7 @@ export default function MitraProfilPage() {
         if (!user) return;
 
         const { data, error } = await supabase
-          .from('users')
+          .from('profiles')
           .select('*')
           .eq('id', user.id)
           .single();
@@ -33,10 +33,10 @@ export default function MitraProfilPage() {
         if (data) {
           setUserData({
             email: user.email || "",
-            full_name: data.full_name || "",
-            phone: data.phone || "",
-            address: data.address || "",
-            joined_date: data.joined_date || "",
+            full_name: data.nama_lengkap || "",
+            phone: data.nomor_telepon || "",
+            address: data.alamat || "",
+            joined_date: data.tanggal_bergabung || "",
           });
         }
       } catch (error) {
@@ -59,11 +59,11 @@ export default function MitraProfilPage() {
       if (!user) throw new Error("User not found");
 
       const { error } = await supabase
-        .from('users')
+        .from('profiles')
         .update({
-          full_name: userData.full_name,
-          phone: userData.phone,
-          address: userData.address,
+          nama_lengkap: userData.full_name,
+          nomor_telepon: userData.phone,
+          alamat: userData.address,
         })
         .eq('id', user.id);
 
