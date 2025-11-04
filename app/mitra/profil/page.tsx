@@ -22,47 +22,26 @@ export default function MitraProfilPage() {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        // Coba ambil data profil
+        // Ambil data profil dari database
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', user.id)
-          .maybeSingle(); // Gunakan maybeSingle() untuk handle jika belum ada data
+          .maybeSingle();
 
-        // Jika belum ada data profil, buat profil baru
-        if (!data && !error) {
-          const { error: insertError } = await supabase
-            .from('profiles')
-            .insert({
-              id: user.id,
-              email: user.email,
-              nama_lengkap: "",
-              nomor_telepon: "",
-              alamat: "",
-            });
-
-          if (insertError) {
-            console.error('Error creating profile:', insertError);
-          }
-
-          // Set default data
-          setUserData({
-            email: user.email || "",
-            full_name: "",
-            phone: "",
-            address: "",
-            joined_date: new Date().toISOString(),
-          });
-        } else if (data) {
-          // Set data dari database
-          setUserData({
-            email: user.email || "",
-            full_name: data.nama_lengkap || "",
-            phone: data.nomor_telepon || "",
-            address: data.alamat || "",
-            joined_date: data.tanggal_bergabung || "",
-          });
+        if (error) {
+          console.error('Error fetching profile:', error);
+          return;
         }
+
+        // Set user data - jika data ada, gunakan dari DB, jika tidak gunakan default
+        setUserData({
+          email: user.email || "",
+          full_name: data?.nama_lengkap || "",
+          phone: data?.nomor_telepon || "",
+          address: data?.alamat || "",
+          joined_date: data?.tanggal_bergabung || new Date().toISOString(),
+        });
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
