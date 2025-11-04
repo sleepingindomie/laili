@@ -174,7 +174,7 @@ export default function Navigation() {
 
           {/* Tombol Hamburger (Mobile Only) */}
           <button
-            className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors touch-target"
+            className="hidden p-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors touch-target"
             onClick={() => {
                 setIsMobileMenuOpen(!isMobileMenuOpen);
                 setIsMitraDropdownOpen(false); // Pastikan dropdown mitra tertutup saat membuka/menutup menu utama
