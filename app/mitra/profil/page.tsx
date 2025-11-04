@@ -22,15 +22,39 @@ export default function MitraProfilPage() {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
+        // Coba ambil data profil
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', user.id)
-          .single();
+          .maybeSingle(); // Gunakan maybeSingle() untuk handle jika belum ada data
 
-        if (error) throw error;
+        // Jika belum ada data profil, buat profil baru
+        if (!data && !error) {
+          const { error: insertError } = await supabase
+            .from('profiles')
+            .insert({
+              id: user.id,
+              email: user.email,
+              nama_lengkap: "",
+              nomor_telepon: "",
+              alamat: "",
+            });
 
-        if (data) {
+          if (insertError) {
+            console.error('Error creating profile:', insertError);
+          }
+
+          // Set default data
+          setUserData({
+            email: user.email || "",
+            full_name: "",
+            phone: "",
+            address: "",
+            joined_date: new Date().toISOString(),
+          });
+        } else if (data) {
+          // Set data dari database
           setUserData({
             email: user.email || "",
             full_name: data.nama_lengkap || "",
@@ -58,18 +82,28 @@ export default function MitraProfilPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not found");
 
+      // Validasi input
+      if (!userData.full_name.trim()) {
+        throw new Error("Nama lengkap harus diisi");
+      }
+
       const { error } = await supabase
         .from('profiles')
         .update({
-          nama_lengkap: userData.full_name,
-          nomor_telepon: userData.phone,
-          alamat: userData.address,
+          nama_lengkap: userData.full_name.trim(),
+          nomor_telepon: userData.phone.trim(),
+          alamat: userData.address.trim(),
         })
         .eq('id', user.id);
 
       if (error) throw error;
 
-      setMessage({ type: "success", text: "Profil berhasil diperbarui!" });
+      setMessage({ type: "success", text: "✅ Profil berhasil diperbarui!" });
+
+      // Auto-hide success message setelah 3 detik
+      setTimeout(() => {
+        setMessage({ type: "", text: "" });
+      }, 3000);
     } catch (error: any) {
       setMessage({ type: "error", text: error.message || "Terjadi kesalahan saat menyimpan data" });
     } finally {
@@ -129,31 +163,39 @@ export default function MitraProfilPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">Email</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Email
+                <span className="ml-1 text-xs text-gray-500">(tidak dapat diubah)</span>
+              </label>
               <input
                 type="email"
                 value={userData.email}
-                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 focus:border-secondary-500 focus:outline-none focus:ring-2 focus:ring-secondary-200"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-600 focus:border-secondary-500 focus:outline-none focus:ring-2 focus:ring-secondary-200"
                 placeholder="email@example.com"
                 readOnly
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">Nama Lengkap</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Nama Lengkap <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 value={userData.full_name}
                 onChange={(e) => setUserData({ ...userData, full_name: e.target.value })}
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-secondary-500 focus:outline-none focus:ring-2 focus:ring-secondary-200"
-                placeholder="Masukkan nama lengkap"
+                placeholder="Masukkan nama lengkap Anda"
+                required
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">Nomor Telepon</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Nomor Telepon
+              </label>
               <input
                 type="tel"
                 value={userData.phone}
@@ -164,23 +206,43 @@ export default function MitraProfilPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">Alamat</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Alamat Lengkap
+              </label>
               <textarea
                 value={userData.address}
                 onChange={(e) => setUserData({ ...userData, address: e.target.value })}
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-secondary-500 focus:outline-none focus:ring-2 focus:ring-secondary-200"
-                rows={3}
-                placeholder="Masukkan alamat lengkap"
+                rows={4}
+                placeholder="Masukkan alamat lengkap untuk pengiriman"
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={saving}
-              className="touch-target w-full rounded-lg bg-secondary-500 px-8 py-4 font-semibold text-white transition-colors hover:bg-secondary-600 disabled:opacity-50 sm:w-auto"
-            >
-              {saving ? "Menyimpan..." : "Simpan Perubahan"}
-            </button>
+            <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+              <button
+                type="submit"
+                disabled={saving}
+                className="touch-target flex-1 rounded-lg bg-secondary-500 px-8 py-3 font-semibold text-white transition-colors hover:bg-secondary-600 disabled:opacity-50 sm:flex-initial"
+              >
+                {saving ? "Menyimpan..." : "💾 Simpan Perubahan"}
+              </button>
+
+              {userData.full_name && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                  className="touch-target rounded-lg border border-gray-300 bg-white px-8 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                >
+                  🔄 Batal
+                </button>
+              )}
+            </div>
+
+            <p className="text-xs text-gray-500">
+              <span className="text-red-500">*</span> Wajib diisi
+            </p>
           </form>
         </div>
       </div>
