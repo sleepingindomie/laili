@@ -19,21 +19,6 @@ export default function Footer() {
             </p>
           </div>
           <div>
-            <h4 className="mb-3 font-bold text-white">Informasi</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/profil" className="text-gray-300 transition-colors hover:text-white">
-                  Tentang Kami
-                </Link>
-              </li>
-              <li>
-                <Link href="/brand" className="text-gray-300 transition-colors hover:text-white">
-                  Brand
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
             <h4 className="mb-3 font-bold text-white">Kontak</h4>
             <ul className="space-y-2">
               <li className="text-gray-300">Email: info@laili.com</li>
