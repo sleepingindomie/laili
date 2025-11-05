@@ -37,13 +37,6 @@ Platform B2B kemitraan berbasis web yang dirancang khusus untuk memberdayakan wa
 - **Tagihan** - Lihat invoice dan informasi pembayaran
 - **Laporan Penjualan** - Monitor total penjualan dan performa
 
-#### Sistem Reward & Poin
-- **Poin** - Akumulasi poin dari pembelian dan referral
-  - 1 poin per Rp 10.000 pembelian
-  - 100 poin per referral mitra baru
-- **Hadiah** - Tukar poin dengan reward (dengan tracking stok)
-- **Riwayat Penukaran** - Histori redemption hadiah
-
 #### Edukasi & Pembelajaran
 - **Kelas Video** - Akses kelas online dengan instruktur
 - **Coaching Schedule** - Jadwal coaching dengan waktu dan pembicara
@@ -102,4 +95,4 @@ Platform B2B kemitraan berbasis web yang dirancang khusus untuk memberdayakan wa
 - **Bahasa Indonesia** - Full localization dalam Bahasa Indonesia
 - **Currency Formatting** - Format mata uang Rupiah (IDR)
 
-**Built with d using Next.js, React, TypeScript, and Supabase**
+**Built using Next.js, React, TypeScript, and Supabase**
