@@ -6,7 +6,7 @@ Platform B2B kemitraan berbasis web yang dirancang khusus untuk memberdayakan wa
 
 **Laili Brand** adalah platform digital yang menyediakan ekosistem lengkap bagi mitra wanita untuk menjalankan bisnis dari rumah. Platform ini menggabungkan sistem penjualan produk, pembelajaran online, reward poin, dan manajemen bisnis dalam satu aplikasi yang terintegrasi.
 
-**Tagline:** _"Dunianya wanita berkarir dari rumah"_
+**Tagline:** _"Dunianya wanita berkarir dari rumah | Ibu Rumah Tangga berdaya & berkarir dari rumah "_
 
 ### Tujuan Platform
 - Memberdayakan wanita untuk membangun karir dan bisnis dari rumah
