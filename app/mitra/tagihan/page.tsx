@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { usePayment } from '@/lib/hooks/usePayment';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCachedUserTransactions } from '@/lib/hooks/useCachedQuery';
 
 interface Transaction {
   id: string;
@@ -22,7 +21,7 @@ interface Transaction {
   };
 }
 
-export default function TagihanPage() {
+function TagihanContent() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -251,5 +250,20 @@ export default function TagihanPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function TagihanPage() {
+  return (
+    <Suspense fallback={
+      <div className="container-responsive py-8">
+        <div className="text-center py-12 text-gray-500">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+          <p className="mt-2">Memuat halaman...</p>
+        </div>
+      </div>
+    }>
+      <TagihanContent />
+    </Suspense>
   );
 }
