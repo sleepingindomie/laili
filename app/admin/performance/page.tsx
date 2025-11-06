@@ -218,19 +218,19 @@ export default function PerformanceDashboard() {
         <h3 className="font-semibold text-blue-900 mb-2">Core Web Vitals Guidelines</h3>
         <ul className="space-y-2 text-sm text-blue-800">
           <li>
-            <strong>LCP (Largest Contentful Paint):</strong> Good: ≤2.5s, Poor: >4s
+            <strong>LCP (Largest Contentful Paint):</strong> Good: &le;2.5s, Poor: &gt;4s
           </li>
           <li>
-            <strong>FID (First Input Delay):</strong> Good: ≤100ms, Poor: >300ms
+            <strong>FID (First Input Delay):</strong> Good: &le;100ms, Poor: &gt;300ms
           </li>
           <li>
-            <strong>CLS (Cumulative Layout Shift):</strong> Good: ≤0.1, Poor: >0.25
+            <strong>CLS (Cumulative Layout Shift):</strong> Good: &le;0.1, Poor: &gt;0.25
           </li>
           <li>
-            <strong>FCP (First Contentful Paint):</strong> Good: ≤1.8s, Poor: >3s
+            <strong>FCP (First Contentful Paint):</strong> Good: &le;1.8s, Poor: &gt;3s
           </li>
           <li>
-            <strong>TTFB (Time to First Byte):</strong> Good: ≤800ms, Poor: >1.8s
+            <strong>TTFB (Time to First Byte):</strong> Good: &le;800ms, Poor: &gt;1.8s
           </li>
         </ul>
       </div>
