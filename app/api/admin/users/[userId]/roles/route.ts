@@ -7,9 +7,9 @@ import { createClient } from '@/lib/supabase/server';
 import { requireAdmin } from '@/lib/rbac/middleware';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }
 
 export async function GET(
@@ -26,7 +26,7 @@ export async function GET(
     }
 
     const supabase = await createClient();
-    const { userId } = params;
+    const { userId } = await params;
 
     const { data: roles, error } = await supabase.rpc('get_user_roles', {
       user_id: userId,
@@ -61,7 +61,7 @@ export async function POST(
     }
 
     const supabase = await createClient();
-    const { userId } = params;
+    const { userId } = await params;
     const body = await request.json();
     const { roleId } = body;
 
@@ -106,7 +106,7 @@ export async function DELETE(
     }
 
     const supabase = await createClient();
-    const { userId } = params;
+    const { userId } = await params;
     const searchParams = request.nextUrl.searchParams;
     const roleId = searchParams.get('roleId');
 
