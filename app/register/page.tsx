@@ -1,179 +1,14 @@
 "use client";
 
-import { useState, FC } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Logo from "@/components/Logo";
-import { Mail, Lock, Eye, EyeOff, User, Phone, MapPin, ChevronDown } from "lucide-react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { Mail, Lock, Eye, EyeOff, User, Phone, MapPin } from "lucide-react";
 
-// --- INTERFACES ---
-interface NavItem {
-  name: string;
-  href: string;
-}
-
-interface NavLinkProps {
-  item: NavItem;
-  className?: string;
-}
-
-// --- FULL NAVIGATION COMPONENT (Inner Component) ---
-const FullNavigation: FC = () => {
-  const pathname = usePathname();
-  const [isMitraDropdownOpen, setIsMitraDropdownOpen] = useState(false);
-
-  const navigation: NavItem[] = [
-    { name: "Beranda", href: "/" },
-    { name: "Profil", href: "/profil" },
-    { name: "Social Media", href: "/social-media" },
-    { name: "Brand", href: "/brand" },
-  ];
-
-  const mitraMenuItems: NavItem[] = [
-    { name: "Testimoni Mitra", href: "/login" },
-    { name: "Kelas Online", href: "/login" },
-    { name: "Video Konten", href: "/login" },
-  ];
-
-  const NavLink: FC<NavLinkProps> = ({ item, className = "" }) => {
-    const isActive = pathname === item.href;
-
-    return (
-      <Link
-        href={item.href}
-        className={`font-medium transition-colors ${
-          isActive ? "text-gray-900 font-semibold" : "text-gray-600 hover:text-gray-900"
-        } ${className}`}
-      >
-        {item.name}
-      </Link>
-    );
-  };
-
-  return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="container-responsive py-4">
-        {/* Layout Desktop: Horizontal */}
-        <div className="hidden md:flex md:items-center md:justify-between">
-          {/* Logo Brand */}
-          <Link href="/" className="flex items-center">
-            <Logo width={120} height={38} />
-          </Link>
-
-          {/* Navigasi Desktop */}
-          <div className="flex items-center gap-6">
-            {navigation.map((item) => (
-              <NavLink key={item.name} item={item} />
-            ))}
-
-            {/* Dropdown Mitra Desktop */}
-            <div className="relative">
-              <button
-                onClick={() => setIsMitraDropdownOpen(!isMitraDropdownOpen)}
-                className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                <span>Mitra</span>
-                <ChevronDown className={`h-4 w-4 transition-transform ${isMitraDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {isMitraDropdownOpen && (
-                <>
-                  {/* Backdrop */}
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setIsMitraDropdownOpen(false)}
-                  />
-
-                  <div className="absolute right-0 z-20 mt-2 w-56 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                    {mitraMenuItems.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setIsMitraDropdownOpen(false)}
-                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
-            <Link
-              href="/login"
-              className="rounded-lg bg-gray-900 px-6 py-2 text-white transition-colors hover:bg-gray-800"
-            >
-              Login
-            </Link>
-          </div>
-        </div>
-
-        {/* Layout Mobile: Vertical - Semua menu ditampilkan tanpa hamburger */}
-        <div className="md:hidden">
-          {/* Logo di atas */}
-          <div className="flex justify-center mb-4">
-            <Link href="/">
-              <Logo width={100} height={32} />
-            </Link>
-          </div>
-
-          {/* Menu navigasi vertikal */}
-          <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
-            {navigation.map((item) => (
-              <NavLink key={item.name} item={item} />
-            ))}
-
-            {/* Dropdown Mitra Mobile - Inline */}
-            <div className="relative">
-              <button
-                onClick={() => setIsMitraDropdownOpen(!isMitraDropdownOpen)}
-                className="flex items-center gap-1 font-medium text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <span>Mitra</span>
-                <ChevronDown className={`h-3 w-3 transition-transform ${isMitraDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {isMitraDropdownOpen && (
-                <>
-                  {/* Backdrop untuk mobile */}
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setIsMitraDropdownOpen(false)}
-                  />
-
-                  <div className="absolute left-0 z-20 mt-2 w-48 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                    {mitraMenuItems.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setIsMitraDropdownOpen(false)}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
-            <Link
-              href="/login"
-              className="rounded-lg bg-gray-900 px-4 py-1.5 text-white transition-colors hover:bg-gray-800"
-            >
-              Login
-            </Link>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
-
-
-// --- REGISTER PAGE UTAMA ---
 export default function RegisterPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -195,7 +30,6 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      // Pastikan window.location.origin ada sebelum memanggil
       const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : '';
 
       const { error } = await supabase.auth.signInWithOAuth({
@@ -265,7 +99,6 @@ export default function RegisterPage() {
       });
 
       if (signUpError) {
-        // Handle specific error cases
         if (signUpError.message.includes('already registered')) {
           throw new Error('Email sudah terdaftar. Silakan gunakan email lain atau login.');
         }
@@ -273,11 +106,10 @@ export default function RegisterPage() {
       }
 
       if (authData.user) {
-        // Wait a bit for auth trigger to complete
+        // Wait for auth trigger
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        // Use UPSERT to either insert or update profile data
-        // This ensures data is always saved regardless of trigger
+        // Upsert profile data
         const { error: profileError } = await supabase
           .from('profiles')
           .upsert({
@@ -294,11 +126,9 @@ export default function RegisterPage() {
 
         if (profileError) {
           console.error('Profile upsert error:', profileError);
-          // Still continue even if profile save fails
-          // User can update profile later
         }
 
-        // Verify profile was saved
+        // Verify profile
         const { data: verifyProfile } = await supabase
           .from('profiles')
           .select('nama_lengkap, email')
@@ -307,12 +137,10 @@ export default function RegisterPage() {
 
         console.log('Profile saved:', verifyProfile);
 
-        // Check if email confirmation is required
+        // Check if email confirmation required
         if (authData.session) {
-          // User is automatically logged in (no email confirmation required)
           router.push('/mitra/beranda');
         } else {
-          // Email confirmation required
           router.push('/login?message=Registrasi berhasil! Silakan cek email Anda untuk verifikasi.');
         }
       }
@@ -325,9 +153,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--accent-warm)' }}>
-      {/* Navigation Component */}
-      <FullNavigation />
+    <div className="min-h-screen bg-gradient-to-b from-white via-[#f1f8ed] to-white">
+      <Navigation />
 
       {/* Register Form */}
       <div className="container-responsive py-10 sm:py-12">
@@ -566,32 +393,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer style={{ backgroundColor: 'var(--accent-darker)' }}>
-          <div className="container-responsive py-10 sm:py-12">
-            <div className="mb-8 flex justify-center">
-              <div className="rounded-lg bg-white p-4">
-                <Logo width={120} height={38} />
-              </div>
-            </div>
-
-            <div className="mb-8 grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 lg:grid-cols-4">
-              <div>
-                <h4 className="mb-3 font-bold text-white">Laili Brand</h4>
-                <p className="leading-relaxed text-gray-300">
-                  Ibu Berkarir dalam rumah
-                </p>
-              </div>
-            </div>
-
-            <div
-              className="border-t pt-5 text-center text-sm text-gray-400"
-              style={{ borderColor: 'var(--primary-700)' }}
-            >
-              <p>&copy; 2025 Laili Brand. All rights reserved.</p>
-            </div>
-          </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
