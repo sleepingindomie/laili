@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useNotifications } from '@/lib/hooks/useNotifications';
-import { Notification } from '@/lib/notifications/realtime';
+import type { Notification } from '@/lib/notifications/types';
 import { useRouter } from 'next/navigation';
 
 export default function NotificationBell() {
