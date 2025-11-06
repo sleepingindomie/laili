@@ -132,4 +132,4 @@ export function getNotificationRealtime(): NotificationRealtime {
   return notificationRealtimeInstance;
 }
 
-export { NotificationRealtime };
+export default NotificationRealtime;
