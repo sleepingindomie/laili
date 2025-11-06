@@ -207,6 +207,50 @@ export interface Database {
           updated_at?: string
         }
       }
+      transactions: {
+        Row: {
+          id: string
+          order_id: string
+          user_id: string
+          amount: number
+          status: 'pending' | 'processing' | 'success' | 'failed' | 'cancelled' | 'expired'
+          payment_type: string | null
+          transaction_id: string | null
+          snap_token: string | null
+          snap_redirect_url: string | null
+          metadata: Record<string, any> | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          user_id: string
+          amount: number
+          status?: 'pending' | 'processing' | 'success' | 'failed' | 'cancelled' | 'expired'
+          payment_type?: string | null
+          transaction_id?: string | null
+          snap_token?: string | null
+          snap_redirect_url?: string | null
+          metadata?: Record<string, any> | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          user_id?: string
+          amount?: number
+          status?: 'pending' | 'processing' | 'success' | 'failed' | 'cancelled' | 'expired'
+          payment_type?: string | null
+          transaction_id?: string | null
+          snap_token?: string | null
+          snap_redirect_url?: string | null
+          metadata?: Record<string, any> | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
   }
 }

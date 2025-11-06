@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface Product {
   id: number;
@@ -120,16 +121,16 @@ export default function MitraKatalogPage() {
               key={product.id}
               className="overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg"
             >
-              <div className="flex h-48 items-center justify-center bg-gradient-to-br from-secondary-100 to-secondary-50">
-                {product.gambar_url ? (
-                  <img
-                    src={product.gambar_url}
-                    alt={product.nama}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <span className="text-6xl">🌸</span>
-                )}
+              <div className="relative h-48 bg-gradient-to-br from-secondary-100 to-secondary-50 overflow-hidden">
+                <OptimizedImage
+                  src={product.gambar_url}
+                  alt={product.nama}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  fallback="🌸"
+                  objectFit="cover"
+                  className="rounded-t-xl"
+                />
               </div>
               <div className="p-6">
                 <h3 className="mb-2 text-lg font-semibold text-gray-800">{product.nama}</h3>

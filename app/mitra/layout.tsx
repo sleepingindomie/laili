@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Home, User, ShoppingBag, GraduationCap, ChevronDown, LogOut } from "lucide-react";
 import Logo from "@/components/Logo";
 import { createClient } from "@/lib/supabase/client";
+import NotificationBell from "@/components/NotificationBell";
 
 export default function MitraLayout({
   children,
@@ -89,6 +90,9 @@ export default function MitraLayout({
                   </Link>
                 );
               })}
+
+              {/* Notification Bell */}
+              <NotificationBell />
 
               {/* Info Dropdown - Desktop */}
               <div className="relative">
