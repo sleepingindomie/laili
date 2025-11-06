@@ -3,7 +3,6 @@
  */
 
 import { ChatMessage } from '@/lib/socket/client';
-import { formatDistanceToNow } from '@/lib/utils/date';
 
 interface MessageBubbleProps {
   message: ChatMessage;
