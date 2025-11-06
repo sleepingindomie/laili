@@ -3,12 +3,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { path, tag, secret } = body;
+    const { path, secret } = body;
 
     // Verify secret token
     if (secret !== process.env.REVALIDATION_SECRET) {
@@ -18,30 +18,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (path) {
-      // Revalidate specific path
-      revalidatePath(path, 'page');
-      return NextResponse.json({
-        success: true,
-        message: `Path ${path} revalidated`,
-        revalidated: true,
-      });
+    if (!path) {
+      return NextResponse.json(
+        { error: 'Missing path parameter' },
+        { status: 400 }
+      );
     }
 
-    if (tag) {
-      // Revalidate by tag
-      await revalidateTag(tag);
-      return NextResponse.json({
-        success: true,
-        message: `Tag ${tag} revalidated`,
-        revalidated: true,
-      });
-    }
+    // Revalidate specific path
+    revalidatePath(path, 'page');
 
-    return NextResponse.json(
-      { error: 'Missing path or tag parameter' },
-      { status: 400 }
-    );
+    return NextResponse.json({
+      success: true,
+      message: `Path ${path} revalidated`,
+      revalidated: true,
+    });
   } catch (error: any) {
     console.error('Revalidation error:', error);
     return NextResponse.json(
