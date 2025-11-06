@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, User, ShoppingBag, GraduationCap, ChevronDown, LogOut } from "lucide-react";
+import { Home, User, ShoppingBag, GraduationCap, ChevronDown, LogOut, MessageCircle, Bell } from "lucide-react";
 import Logo from "@/components/Logo";
 import { createClient } from "@/lib/supabase/client";
 import NotificationBell from "@/components/NotificationBell";
@@ -15,6 +15,7 @@ export default function MitraLayout({
 }) {
   const [isInfoDropdownOpen, setIsInfoDropdownOpen] = useState(false);
   const [userName, setUserName] = useState("Nama Bunda");
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -32,6 +33,15 @@ export default function MitraLayout({
         if (userData?.nama_lengkap) {
           setUserName(userData.nama_lengkap);
         }
+
+        // Check if user is admin
+        const { data: roles } = await supabase
+          .from('user_roles')
+          .select('role:roles(name)')
+          .eq('user_id', user.id);
+
+        const hasAdminRole = roles?.some((r: any) => r.role?.name === 'admin');
+        setIsAdmin(hasAdminRole || false);
       }
     };
     getUser();
@@ -42,6 +52,8 @@ export default function MitraLayout({
     { name: "Profil", href: "/mitra/profil", icon: User },
     { name: "Katalog", href: "/mitra/katalog", icon: ShoppingBag },
     { name: "Kelas", href: "/mitra/kelas", icon: GraduationCap },
+    { name: "Chat", href: "/mitra/chat", icon: MessageCircle },
+    { name: "Notifikasi", href: "/mitra/notifications", icon: Bell },
   ];
 
   const infoMenuItems = [
@@ -127,6 +139,20 @@ export default function MitraLayout({
                   </>
                 )}
               </div>
+
+              {/* Admin Panel Link (for admins only) */}
+              {isAdmin && (
+                <Link
+                  href="/admin/users"
+                  className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 font-medium text-white transition-colors hover:bg-purple-700"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span>Admin</span>
+                </Link>
+              )}
 
               {/* Logout Button */}
               <button
