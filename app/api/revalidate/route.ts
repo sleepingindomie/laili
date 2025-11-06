@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     if (path) {
       // Revalidate specific path
-      revalidatePath(path);
+      revalidatePath(path, 'page');
       return NextResponse.json({
         success: true,
         message: `Path ${path} revalidated`,
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     if (tag) {
       // Revalidate by tag
-      revalidateTag(tag);
+      await revalidateTag(tag);
       return NextResponse.json({
         success: true,
         message: `Tag ${tag} revalidated`,
