@@ -13,7 +13,7 @@ Implementasi caching system yang komprehensif dengan dukungan:
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ architecture
 
 ```
 ┌─────────────────────────────────────────┐

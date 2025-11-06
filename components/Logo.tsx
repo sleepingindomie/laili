@@ -16,8 +16,8 @@ export default function Logo({
   return (
     <div className={`relative ${className}`}>
       <Image
-        src="/LailiLogo.png"
-        alt="Laili Brand"
+        src="/LogoToma.png"
+        alt="Toma - Platform Agregator Bahan Baku Organik B2B"
         width={width}
         height={height}
         priority={priority}

@@ -11,7 +11,7 @@
 
 ---
 
-## 🚀 Setup Instructions
+## 🚀 setup Instructions
 
 ### 1. Dapatkan Midtrans Credentials
 

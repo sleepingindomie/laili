@@ -493,7 +493,7 @@ User → Join Room → Socket.io Connect → Send Message →
 Real-time Broadcast → All Members Receive → Database Saved
 ```
 
-### 4. Cache Flow:
+### 4. cache Flow:
 ```
 Request → Check Cache → If Miss: Query DB → Store in Cache → Return Data
 Next Request → Cache Hit → Return Cached Data (Fast!)

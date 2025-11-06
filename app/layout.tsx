@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Cinzel_Decorative, Libre_Baskerville } from "next/font/google";
+import { Montserrat, Lato } from "next/font/google";
 import "./globals.css";
 
-const cinzelDecorative = Cinzel_Decorative({
-  variable: "--font-cinzel",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const libreBaskerville = Libre_Baskerville({
-  variable: "--font-baskerville",
+const lato = Lato({
+  variable: "--font-lato",
   subsets: ["latin"],
   weight: ["400", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Laili - Platform Mitra",
-  description: "Dunianya wanita berkarir dari rumah",
+  title: "Toma - Platform Agregator Bahan Baku Organik B2B",
+  description: "Bahan Baku Organik Terbaik, Kunci Kepercayaan Pelanggan Anda. Platform B2B yang menghubungkan petani organik bersertifikat dengan sektor komersial melalui rantai pasok transparan.",
 };
 
 export default function RootLayout({
@@ -27,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body
-        className={`${cinzelDecorative.variable} ${libreBaskerville.variable} antialiased`}
+        className={`${montserrat.variable} ${lato.variable} antialiased`}
       >
         {children}
       </body>
