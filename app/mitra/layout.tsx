@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, User, ShoppingBag, GraduationCap, ChevronDown, LogOut, MessageCircle, Bell } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Logo from "@/components/Logo";
 import { createClient } from "@/lib/supabase/client";
 import NotificationBell from "@/components/NotificationBell";
@@ -51,7 +52,7 @@ export default function MitraLayout({
     { name: "Beranda", href: "/mitra/beranda", icon: Home },
     { name: "Profil", href: "/mitra/profil", icon: User },
     { name: "Katalog", href: "/mitra/katalog", icon: ShoppingBag },
-    { name: "Kelas", href: "/mitra/kelas", icon: GraduationCap },
+    { name: "Edukasi", href: "/mitra/kelas", icon: GraduationCap },
     { name: "Chat", href: "/mitra/chat", icon: MessageCircle },
     { name: "Notifikasi", href: "/mitra/notifications", icon: Bell },
   ];
@@ -72,72 +73,98 @@ export default function MitraLayout({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#f1f8ed] to-white">
       {/* Top Navigation */}
       <nav className="sticky top-0 z-50 bg-white shadow-md">
         <div className="container-responsive py-4">
           {/* Desktop Layout */}
           <div className="hidden md:flex md:items-center md:justify-between">
             {/* Logo */}
-            <Link href="/mitra/beranda" className="flex items-center">
-              <Logo width={120} height={38} />
-            </Link>
+            <motion.div whileHover={{ scale: 1.05 }}>
+              <Link href="/mitra/beranda" className="flex items-center">
+                <Logo width={120} height={38} />
+              </Link>
+            </motion.div>
 
             {/* Desktop Navigation */}
             <div className="flex items-center gap-6">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;
                 return (
-                  <Link
+                  <motion.div
                     key={item.name}
-                    href={item.href}
-                    className={`flex items-center gap-2 font-medium transition-colors ${
-                      isActive
-                        ? "text-secondary-600 font-semibold"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <item.icon className="h-5 w-5" />
-                    <span>{item.name}</span>
-                  </Link>
+                    <Link
+                      href={item.href}
+                      className={`flex items-center gap-2 font-medium transition-colors ${
+                        isActive
+                          ? "text-[#1A4D2E] font-semibold border-b-2 border-[#1A4D2E]"
+                          : "text-gray-700 hover:text-[#1A4D2E]"
+                      }`}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  </motion.div>
                 );
               })}
 
               {/* Notification Bell */}
               <NotificationBell />
 
-              {/* Info Dropdown - Desktop */}
+              {/* Info Dropdown - Desktop dengan Framer Motion */}
               <div className="relative">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setIsInfoDropdownOpen(!isInfoDropdownOpen)}
-                  className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                  className="flex items-center gap-2 rounded-lg border-2 border-[#A8C69F] bg-white px-4 py-2 font-medium text-[#1A4D2E] transition-colors hover:bg-[#f1f8ed]"
                 >
                   <span>Info</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${isInfoDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
+                  <motion.div
+                    animate={{ rotate: isInfoDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </motion.div>
+                </motion.button>
 
-                {isInfoDropdownOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-10"
-                      onClick={() => setIsInfoDropdownOpen(false)}
-                    />
-                    <div className="absolute right-0 z-20 mt-2 w-56 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                      {infoMenuItems.map((item, index) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => setIsInfoDropdownOpen(false)}
-                          className={`block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 ${
-                            index === 0 ? 'rounded-t-lg' : ''
-                          } ${index === infoMenuItems.length - 1 ? 'rounded-b-lg' : ''}`}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                )}
+                <AnimatePresence>
+                  {isInfoDropdownOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setIsInfoDropdownOpen(false)}
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute right-0 z-20 mt-2 w-56 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                      >
+                        {infoMenuItems.map((item, index) => (
+                          <motion.div
+                            key={item.name}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                          >
+                            <Link
+                              href={item.href}
+                              onClick={() => setIsInfoDropdownOpen(false)}
+                              className="block px-4 py-3 text-sm text-gray-700 hover:bg-[#e8f5e9] hover:text-[#1A4D2E] transition-colors"
+                            >
+                              {item.name}
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Admin Panel Link (for admins only) */}
@@ -155,13 +182,15 @@ export default function MitraLayout({
               )}
 
               {/* Logout Button */}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2 font-medium text-white transition-colors hover:bg-gray-800"
+                className="flex items-center gap-2 rounded-lg bg-[#1A4D2E] px-6 py-2 font-medium text-white transition-colors hover:bg-[#12331c] shadow-md hover:shadow-lg"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Keluar</span>
-              </button>
+              </motion.button>
             </div>
           </div>
 
@@ -184,8 +213,8 @@ export default function MitraLayout({
                     href={item.href}
                     className={`flex items-center gap-1.5 font-medium transition-colors ${
                       isActive
-                        ? "text-secondary-600 font-semibold"
-                        : "text-gray-600 hover:text-gray-900"
+                        ? "text-[#1A4D2E] font-semibold"
+                        : "text-gray-600 hover:text-[#1A4D2E]"
                     }`}
                   >
                     <item.icon className="h-4 w-4" />
@@ -198,38 +227,46 @@ export default function MitraLayout({
               <div className="relative">
                 <button
                   onClick={() => setIsInfoDropdownOpen(!isInfoDropdownOpen)}
-                  className="flex items-center gap-1 font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                  className="flex items-center gap-1 font-medium text-gray-600 hover:text-[#1A4D2E] transition-colors"
                 >
                   <span>Info</span>
                   <ChevronDown className={`h-3 w-3 transition-transform ${isInfoDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
-                {isInfoDropdownOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-10"
-                      onClick={() => setIsInfoDropdownOpen(false)}
-                    />
-                    <div className="absolute left-0 z-20 mt-2 w-48 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                      {infoMenuItems.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => setIsInfoDropdownOpen(false)}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                )}
+                <AnimatePresence>
+                  {isInfoDropdownOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setIsInfoDropdownOpen(false)}
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute left-0 z-20 mt-2 w-48 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                      >
+                        {infoMenuItems.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => setIsInfoDropdownOpen(false)}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#e8f5e9] hover:text-[#1A4D2E] transition-colors"
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Logout Button Mobile */}
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 rounded-lg bg-gray-900 px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-gray-800"
+                className="flex items-center gap-1.5 rounded-lg bg-[#1A4D2E] px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#12331c]"
               >
                 <LogOut className="h-3 w-3" />
                 <span>Keluar</span>

@@ -19,6 +19,11 @@ const lato = Lato({
 export const metadata: Metadata = {
   title: "Toma - Platform Agregator Bahan Baku Organik B2B",
   description: "Bahan Baku Organik Terbaik, Kunci Kepercayaan Pelanggan Anda. Platform B2B yang menghubungkan petani organik bersertifikat dengan sektor komersial melalui rantai pasok transparan.",
+  icons: {
+    icon: "/LogoToma.png",
+    shortcut: "/LogoToma.png",
+    apple: "/LogoToma.png",
+  },
 };
 
 export default function RootLayout({
