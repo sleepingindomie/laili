@@ -243,7 +243,7 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <div className="mt-6 text-center text-sm text-gray-600">
+            <div className="mt-6 text-center text-sm text-black">
               Belum punya akun?{" "}
               <Link href="/register" className="font-semibold text-secondary-600 hover:text-secondary-700">
                 Daftar di sini

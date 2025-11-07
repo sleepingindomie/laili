@@ -383,7 +383,7 @@ export default function RegisterPage() {
               </p>
             </div>
 
-            <div className="mt-6 text-center text-sm text-gray-600">
+            <div className="mt-6 text-center text-sm text-black">
               Sudah punya akun?{" "}
               <Link href="/login" className="font-semibold text-secondary-600 hover:text-secondary-700">
                 Login di sini

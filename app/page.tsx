@@ -134,7 +134,7 @@ export default function HomePage() {
                 transition={{ duration: 0.8, delay: 0.7 }}
                 className="mx-auto mb-4 max-w-2xl text-lg leading-relaxed text-gray-700 sm:text-xl"
               >
-                <strong className="text-[#1A4D2E]">Transparansi</strong> · <strong className="text-[#8B4513]">Kualitas</strong> · <strong className="text-[#A8C69F]">Keberlanjutan</strong>
+                <strong className="text-[#1A4D2E]">Transparansi</strong> · <strong className="text-[#8B4513]">Kualitas</strong> · <strong className="text-[#809977]">Keberlanjutan</strong>
               </motion.p>
 
               <motion.p

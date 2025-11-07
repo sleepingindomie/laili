@@ -158,7 +158,7 @@ export default function MitraProfilPage() {
               </span>
             </div>
             <div className="text-center sm:text-left">
-              <h2 className="text-2xl font-bold text-gray-800">
+              <h2 className="text-2xl font-bold !text-gray-800">
                 {userData.full_name || "Nama Supplier"}
               </h2>
               <p className="text-gray-600">Partner Toma - Supplier Bahan Baku Organik</p>
