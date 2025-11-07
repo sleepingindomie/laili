@@ -58,7 +58,7 @@ export default function HomePage() {
         className="relative overflow-hidden py-16 sm:py-24"
       >
         {/* Animated Background Blobs */}
-        <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 -z-10 overflow-hidden">
           <motion.div
             animate={{
               scale: [1, 1.2, 1],
@@ -70,7 +70,7 @@ export default function HomePage() {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="absolute -top-20 -left-20 h-96 w-96 bg-gradient-to-br from-[#A8C69F]/30 to-[#1A4D2E]/20 blur-3xl"
+            className="absolute top-0 left-0 h-80 w-80 bg-gradient-to-br from-[#A8C69F]/30 to-[#1A4D2E]/20 blur-3xl"
           />
           <motion.div
             animate={{
@@ -84,7 +84,7 @@ export default function HomePage() {
               ease: "easeInOut",
               delay: 2
             }}
-            className="absolute -bottom-20 -right-20 h-96 w-96 bg-gradient-to-tl from-[#B8873B]/20 to-[#8B4513]/10 blur-3xl"
+            className="absolute bottom-0 right-0 h-80 w-80 bg-gradient-to-tl from-[#B8873B]/20 to-[#8B4513]/10 blur-3xl"
           />
         </div>
 

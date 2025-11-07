@@ -28,7 +28,7 @@ export default function Footer() {
           className="mb-8 grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 lg:grid-cols-4"
         >
           <div className="text-center lg:text-left">
-            <h4 className="mb-3 font-bold text-white">PT. Toma Organik Solusi</h4>
+            <h4 className="mb-3 font-bold !text-white">PT. Toma Organik Solusi</h4>
             <p className="leading-relaxed text-gray-200">
               Bahan Baku Organik Terbaik, Kunci Kepercayaan Pelanggan Anda
             </p>
