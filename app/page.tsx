@@ -219,7 +219,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="mb-12 text-center"
           >
-            <h2 className="mb-4 text-3xl font-bold text-[#1A4D2E] sm:text-4xl">
+            <h2 className="mb-4 text-3xl font-bold !text-[#1A4D2E] sm:text-4xl">
               Fasilitas untuk Partner Anda
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">

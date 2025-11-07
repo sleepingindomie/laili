@@ -209,7 +209,7 @@ export default function SocialMediaPage() {
               transition={{ delay: 0.4 }}
               className="mt-12 rounded-3xl bg-gradient-to-br from-[#1A4D2E] to-[#12331c] p-8 text-center shadow-2xl sm:p-12"
             >
-              <h3 className="mb-4 text-2xl font-bold text-white sm:text-3xl">
+              <h3 className="mb-4 text-2xl font-bold !text-white sm:text-3xl">
                 Bergabunglah dengan Komunitas Toma
               </h3>
               <p className="mb-6 text-lg text-gray-200">

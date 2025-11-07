@@ -64,7 +64,7 @@ export default function ProfilPage() {
             className="mx-auto max-w-4xl"
           >
             <div className="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-[#1A4D2E]/10 sm:p-12">
-              <h2 className="mb-6 text-center text-3xl font-bold text-[#1A4D2E]">
+              <h2 className="mb-6 text-center text-3xl font-bold !text-[#1A4D2E]">
                 Menghubungkan Petani dengan Sektor Komersial
               </h2>
               <p className="text-center text-lg leading-relaxed text-gray-700">
@@ -85,7 +85,7 @@ export default function ProfilPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="mb-12 text-center text-3xl font-bold text-[#1A4D2E] sm:text-4xl"
+            className="mb-12 text-center text-3xl font-bold !text-[#1A4D2E] sm:text-4xl"
           >
             Visi & Misi Kami
           </motion.h2>
@@ -105,7 +105,7 @@ export default function ProfilPage() {
                 <div className="mb-4 inline-flex rounded-xl bg-white/10 p-3 backdrop-blur-sm">
                   <Target className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-white">Visi</h3>
+                <h3 className="text-3xl font-bold !text-white">Visi</h3>
               </div>
               <p className="text-lg leading-relaxed text-gray-200">
                 Menjadi platform agregator bahan baku organik <strong className="text-[#A8C69F]">terdepan di Indonesia</strong> yang
@@ -133,7 +133,7 @@ export default function ProfilPage() {
                 <div className="mb-4 inline-flex rounded-xl bg-white/10 p-3 backdrop-blur-sm">
                   <Rocket className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-white">Misi</h3>
+                <h3 className="text-3xl font-bold !text-white">Misi</h3>
               </div>
               <div className="space-y-3 text-gray-100">
                 <p className="flex items-start gap-2">
@@ -171,7 +171,7 @@ export default function ProfilPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="mb-4 text-center text-3xl font-bold text-[#1A4D2E] sm:text-4xl"
+            className="mb-4 text-center text-3xl font-bold !text-[#1A4D2E] sm:text-4xl"
           >
             4 Nilai Inti Toma
           </motion.h2>
@@ -251,7 +251,7 @@ export default function ProfilPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="mb-12 text-center text-3xl font-bold text-[#1A4D2E] sm:text-4xl"
+            className="mb-12 text-center text-3xl font-bold !text-[#1A4D2E] sm:text-4xl"
           >
             5 Keuntungan Bergabung dengan Toma
           </motion.h2>

@@ -63,7 +63,7 @@ export default function BrandPage() {
             className="mx-auto max-w-4xl"
           >
             <div className="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-[#1A4D2E]/10 sm:p-12">
-              <h2 className="mb-6 text-center text-3xl font-bold text-[#1A4D2E]">
+              <h2 className="mb-6 text-center text-3xl font-bold !text-[#1A4D2E]">
                 Tentang PT. Toma Organik Solusi
               </h2>
               <div className="space-y-4 text-lg leading-relaxed text-gray-700">
@@ -95,7 +95,7 @@ export default function BrandPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="mb-12 text-center text-3xl font-bold text-[#1A4D2E] sm:text-4xl"
+            className="mb-12 text-center text-3xl font-bold !text-[#1A4D2E] sm:text-4xl"
           >
             Brand Identity Toma
           </motion.h2>
@@ -155,7 +155,7 @@ export default function BrandPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="mb-12 text-center text-3xl font-bold text-[#1A4D2E] sm:text-4xl"
+            className="mb-12 text-center text-3xl font-bold !text-[#1A4D2E] sm:text-4xl"
           >
             Standar Kualitas Produk Toma
           </motion.h2>
