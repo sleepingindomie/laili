@@ -99,7 +99,7 @@ export default function SocialMediaPage() {
         </div>
       </section>
 
-      {/* Social Links dengan Liquid Hover Effect */}
+      {/* Social Links */}
       <section className="py-16">
         <div className="container-responsive">
           <div className="mx-auto max-w-5xl">
@@ -118,83 +118,36 @@ export default function SocialMediaPage() {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group relative block overflow-hidden rounded-3xl bg-white p-8 shadow-lg ring-1 ring-[#1A4D2E]/10 transition-all hover:shadow-2xl"
+                      className="group block rounded-3xl bg-white p-8 shadow-lg ring-1 ring-[#1A4D2E]/10 transition-all hover:shadow-2xl hover:ring-2 hover:ring-[#1A4D2E]/20"
                     >
-                      {/* Liquid Fill Effect - Background yang naik dari bawah */}
-                      <motion.div
-                        className={`absolute inset-0 -z-10 ${social.bgColor}`}
-                        initial={{ y: "100%" }}
-                        whileHover={{ y: 0 }}
-                        transition={{ duration: 0.4, ease: "easeOut" }}
-                      />
-
-                      {/* Blob Morphing Background */}
-                      <motion.div
-                        className={`absolute inset-0 bg-gradient-to-br ${social.gradient} opacity-0 transition-opacity`}
-                        animate={{
-                          scale: [1, 1.2, 1],
-                          rotate: [0, 90, 0],
-                          borderRadius: ["30%", "50%", "30%"]
-                        }}
-                        transition={{
-                          duration: 10 + index * 2,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                        style={{ filter: "blur(60px)" }}
-                      />
-
-                      <div className="relative z-10">
-                        {/* Icon dengan Scaling Animation */}
-                        <motion.div
-                          whileHover={{ scale: 1.15, y: -5 }}
-                          transition={{ duration: 0.3, ease: "easeOut" }}
-                          className={`mb-6 inline-flex items-center justify-center rounded-2xl bg-gradient-to-br ${social.gradient} p-4 shadow-xl`}
-                        >
-                          <Icon className="h-10 w-10 text-white" />
-                        </motion.div>
-
-                        {/* Text Content */}
-                        <h3 className="mb-2 text-2xl font-bold text-[#1A4D2E] transition-colors group-hover:text-white">
-                          {social.name}
-                        </h3>
-                        <p className="mb-4 text-lg font-medium text-gray-700 transition-colors group-hover:text-white/90">
-                          {social.handle}
-                        </p>
-                        <p className="mb-6 text-sm leading-relaxed text-gray-600 transition-colors group-hover:text-white/80">
-                          {social.description}
-                        </p>
-
-                        {/* CTA Arrow dengan Animation */}
-                        <div className="flex items-center text-sm font-semibold text-[#1A4D2E] transition-colors group-hover:text-white">
-                          <span>Kunjungi Sekarang</span>
-                          <motion.svg
-                            className="ml-2 h-5 w-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            animate={{ x: [0, 5, 0] }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            }}
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </motion.svg>
-                        </div>
+                      {/* Icon */}
+                      <div className={`mb-6 inline-flex items-center justify-center rounded-2xl bg-gradient-to-br ${social.gradient} p-4 shadow-xl transition-transform group-hover:scale-110`}>
+                        <Icon className="h-10 w-10 text-white" />
                       </div>
 
-                      {/* Shimmer Effect on Hover */}
-                      <motion.div
-                        className="pointer-events-none absolute inset-0 z-20"
-                        style={{
-                          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)"
-                        }}
-                        initial={{ x: "-100%" }}
-                        whileHover={{ x: "100%" }}
-                        transition={{ duration: 0.6 }}
-                      />
+                      {/* Text Content */}
+                      <h3 className="mb-2 text-2xl font-bold text-[#1A4D2E]">
+                        {social.name}
+                      </h3>
+                      <p className="mb-4 text-lg font-medium text-gray-700">
+                        {social.handle}
+                      </p>
+                      <p className="mb-6 text-sm leading-relaxed text-gray-600">
+                        {social.description}
+                      </p>
+
+                      {/* CTA Arrow */}
+                      <div className="flex items-center text-sm font-semibold text-[#1A4D2E] transition-transform group-hover:translate-x-2">
+                        <span>Kunjungi Sekarang</span>
+                        <svg
+                          className="ml-2 h-5 w-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
                     </Link>
                   </motion.div>
                 );
