@@ -163,7 +163,7 @@ export default function RegisterPage() {
             <div className="mb-6 flex justify-center">
               <Logo width={100} height={32} />
             </div>
-            <h2 className="mb-5 text-center text-2xl font-semibold text-gray-800">
+            <h2 className="mb-5 text-center text-2xl font-semibold !text-black">
               Daftar Akun Baru
             </h2>
 
