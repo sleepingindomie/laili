@@ -156,7 +156,7 @@ export default function HomePage() {
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
                     href="/login"
-                    className="group relative overflow-hidden rounded-xl bg-[#1A4D2E] px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl"
+                    className="group relative inline-block overflow-hidden rounded-xl bg-[#1A4D2E] px-8 py-4 text-center text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl"
                   >
                     <motion.span
                       className="absolute inset-0 bg-gradient-to-r from-[#12331c] to-[#1A4D2E]"
@@ -171,7 +171,7 @@ export default function HomePage() {
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
                     href="/profil"
-                    className="rounded-xl border-2 border-[#1A4D2E] bg-white px-8 py-4 text-lg font-semibold text-[#1A4D2E] shadow-lg transition-all hover:bg-[#e8f5e9]"
+                    className="inline-block rounded-xl border-2 border-[#1A4D2E] bg-white px-8 py-4 text-center text-lg font-semibold text-[#1A4D2E] shadow-lg transition-all hover:bg-[#e8f5e9]"
                   >
                     Pelajari Lebih Lanjut
                   </Link>

@@ -89,7 +89,7 @@ export default function SocialMediaPage() {
               📱
             </motion.div>
 
-            <h1 className="mb-6 text-4xl font-bold text-white sm:text-5xl">
+            <h1 className="mb-6 text-4xl font-bold !text-white sm:text-5xl">
               Terhubung dengan Toma
             </h1>
             <p className="text-xl text-gray-200">

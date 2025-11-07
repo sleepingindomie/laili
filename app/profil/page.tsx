@@ -44,7 +44,7 @@ export default function ProfilPage() {
               <Target className="h-12 w-12 text-white" />
             </motion.div>
 
-            <h1 className="mb-6 text-4xl font-bold text-white sm:text-5xl">
+            <h1 className="mb-6 text-4xl font-bold !text-white sm:text-5xl">
               Tentang PT. Toma Organik Solusi
             </h1>
             <p className="text-xl text-gray-200">
