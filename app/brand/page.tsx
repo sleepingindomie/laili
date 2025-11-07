@@ -43,7 +43,7 @@ export default function BrandPage() {
               <Leaf className="h-12 w-12 text-white" />
             </motion.div>
 
-            <h1 className="mb-6 text-4xl font-bold text-white sm:text-5xl">
+            <h1 className="mb-6 text-4xl font-bold !text-white sm:text-5xl">
               Toma Brand Identity
             </h1>
             <p className="text-xl text-gray-200">
