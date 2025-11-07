@@ -122,7 +122,7 @@ export default function SocialMediaPage() {
                     >
                       {/* Liquid Fill Effect - Background yang naik dari bawah */}
                       <motion.div
-                        className={`absolute inset-0 ${social.bgColor}`}
+                        className={`absolute inset-0 -z-10 ${social.bgColor}`}
                         initial={{ y: "100%" }}
                         whileHover={{ y: 0 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -187,7 +187,7 @@ export default function SocialMediaPage() {
 
                       {/* Shimmer Effect on Hover */}
                       <motion.div
-                        className="absolute inset-0 -z-10"
+                        className="pointer-events-none absolute inset-0 z-20"
                         style={{
                           background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)"
                         }}
