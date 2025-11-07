@@ -147,8 +147,8 @@ export default function SocialMediaPage() {
                       <div className="relative z-10">
                         {/* Icon dengan Scaling Animation */}
                         <motion.div
-                          whileHover={{ rotate: 360, scale: 1.2 }}
-                          transition={{ duration: 0.6 }}
+                          whileHover={{ scale: 1.15, y: -5 }}
+                          transition={{ duration: 0.3, ease: "easeOut" }}
                           className={`mb-6 inline-flex items-center justify-center rounded-2xl bg-gradient-to-br ${social.gradient} p-4 shadow-xl`}
                         >
                           <Icon className="h-10 w-10 text-white" />
@@ -224,9 +224,9 @@ export default function SocialMediaPage() {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ scale: 1.2, rotate: 360 }}
+                      whileHover={{ scale: 1.15, y: -3 }}
                       whileTap={{ scale: 0.9 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
                       className="inline-flex rounded-full bg-white/10 p-3 backdrop-blur-sm transition-colors hover:bg-white/20"
                     >
                       <IconComponent className="h-6 w-6 text-white" />

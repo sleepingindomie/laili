@@ -178,8 +178,8 @@ export default function MitraBerandaPage() {
                 <div className="mb-4 flex items-center justify-between">
                   <div className="text-sm font-medium text-gray-600">{stat.title}</div>
                   <motion.div
-                    whileHover={{ rotate: 360, scale: 1.2 }}
-                    transition={{ duration: 0.6 }}
+                    whileHover={{ scale: 1.15, y: -3 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                     className={`rounded-xl bg-gradient-to-br ${stat.gradient} p-2`}
                   >
                     <IconComponent className="h-5 w-5 text-white" />
@@ -238,8 +238,8 @@ export default function MitraBerandaPage() {
                 className="group flex touch-target flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md ring-1 ring-[#1A4D2E]/10 transition-all hover:shadow-xl"
               >
                 <motion.div
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.5 }}
+                  whileHover={{ scale: 1.2 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   className="flex h-14 w-14 items-center justify-center rounded-full"
                   style={{ backgroundColor: `${action.color}20` }}
                 >

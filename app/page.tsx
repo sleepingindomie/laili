@@ -294,8 +294,8 @@ export default function HomePage() {
 
                   <div className="relative z-10">
                     <motion.div
-                      whileHover={{ rotate: 360, scale: 1.2 }}
-                      transition={{ duration: 0.6 }}
+                      whileHover={{ scale: 1.1, y: -5 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
                       className={`mb-4 inline-flex rounded-xl bg-gradient-to-br ${feature.gradient} p-3 text-white shadow-md`}
                     >
                       <IconComponent className="h-6 w-6" />

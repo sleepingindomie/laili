@@ -199,8 +199,8 @@ export default function BrandPage() {
                   className="rounded-2xl bg-white p-6 shadow-lg ring-1 ring-[#1A4D2E]/10 transition-all hover:shadow-2xl"
                 >
                   <motion.div
-                    whileHover={{ rotate: 360, scale: 1.2 }}
-                    transition={{ duration: 0.6 }}
+                    whileHover={{ scale: 1.15, y: -5 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                     className="mb-4"
                   >
                     <IconComponent className="h-12 w-12" style={{ color: quality.color }} />

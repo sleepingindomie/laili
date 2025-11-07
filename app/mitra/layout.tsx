@@ -54,7 +54,6 @@ export default function MitraLayout({
     { name: "Katalog", href: "/mitra/katalog", icon: ShoppingBag },
     { name: "Edukasi", href: "/mitra/kelas", icon: GraduationCap },
     { name: "Chat", href: "/mitra/chat", icon: MessageCircle },
-    { name: "Notifikasi", href: "/mitra/notifications", icon: Bell },
   ];
 
   const infoMenuItems = [

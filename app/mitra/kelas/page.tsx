@@ -148,10 +148,12 @@ export default function MitraKelasPage() {
             className="py-12 text-center"
           >
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="mx-auto mb-4 h-12 w-12 rounded-full border-4 border-[#A8C69F] border-t-[#1A4D2E]"
-            />
+              animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="mx-auto mb-4 flex h-12 w-12 items-center justify-center"
+            >
+              <div className="h-12 w-12 rounded-full border-4 border-[#A8C69F] border-t-[#1A4D2E]"></div>
+            </motion.div>
             <p className="text-gray-500">Memuat jadwal pelatihan...</p>
           </motion.div>
         ) : upcomingCoaching.length === 0 ? (
@@ -177,8 +179,8 @@ export default function MitraKelasPage() {
               >
                 <div className="flex items-center gap-4">
                   <motion.div
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.5 }}
+                    whileHover={{ scale: 1.15 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                     className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1A4D2E] to-[#A8C69F] shadow-md"
                   >
                     <Calendar className="h-7 w-7 text-white" />
@@ -232,10 +234,12 @@ export default function MitraKelasPage() {
             className="py-12 text-center"
           >
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="mx-auto mb-4 h-12 w-12 rounded-full border-4 border-[#A8C69F] border-t-[#1A4D2E]"
-            />
+              animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="mx-auto mb-4 flex h-12 w-12 items-center justify-center"
+            >
+              <div className="h-12 w-12 rounded-full border-4 border-[#A8C69F] border-t-[#1A4D2E]"></div>
+            </motion.div>
             <p className="text-gray-500">Memuat video pembelajaran...</p>
           </motion.div>
         ) : classes.length === 0 ? (

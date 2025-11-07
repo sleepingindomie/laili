@@ -224,8 +224,8 @@ export default function ProfilPage() {
                   className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-[#f1f8ed] p-8 shadow-lg ring-1 ring-[#1A4D2E]/10 transition-all hover:shadow-2xl"
                 >
                   <motion.div
-                    whileHover={{ rotate: 360, scale: 1.2 }}
-                    transition={{ duration: 0.6 }}
+                    whileHover={{ scale: 1.15, y: -5 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                     className={`mb-6 inline-flex rounded-2xl bg-gradient-to-br ${nilai.gradient} p-4 shadow-md`}
                   >
                     <IconComponent className="h-8 w-8 text-white" />
@@ -289,8 +289,8 @@ export default function ProfilPage() {
                 className="flex gap-6 rounded-2xl border-2 border-[#A8C69F]/30 bg-white p-6 shadow-md transition-all hover:border-[#1A4D2E] hover:shadow-xl"
               >
                 <motion.div
-                  whileHover={{ scale: 1.1, rotate: 360 }}
-                  transition={{ duration: 0.5 }}
+                  whileHover={{ scale: 1.15 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1A4D2E] to-[#A8C69F] shadow-lg"
                 >
                   <span className="text-2xl font-bold text-white">{index + 1}</span>

@@ -160,10 +160,12 @@ export default function MitraKatalogPage() {
           className="py-16 text-center"
         >
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="mx-auto mb-4 h-12 w-12 rounded-full border-4 border-[#A8C69F] border-t-[#1A4D2E]"
-          />
+            animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="mx-auto mb-4 flex h-12 w-12 items-center justify-center"
+          >
+            <div className="h-12 w-12 rounded-full border-4 border-[#A8C69F] border-t-[#1A4D2E]"></div>
+          </motion.div>
           <p className="text-gray-500">Memuat katalog bahan baku organik...</p>
         </motion.div>
       ) : filteredProducts.length === 0 ? (
