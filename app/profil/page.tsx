@@ -306,7 +306,7 @@ export default function ProfilPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16">
+      <section className="py-16 overflow-hidden">
         <div className="container-responsive">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

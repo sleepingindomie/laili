@@ -113,14 +113,14 @@ export default function HomePage() {
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
                 <motion.h1
-                  className="mb-6 text-4xl font-bold leading-tight text-[#1A4D2E] sm:text-5xl lg:text-6xl"
+                  className="mb-6 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1, delay: 0.5 }}
                 >
                   Platform Agregator
                   <br />
-                  <span className="bg-gradient-to-r from-[#1A4D2E] via-[#A8C69F] to-[#B8873B] bg-clip-text text-transparent">
+                  <span className="text-[#1A4D2E]">
                     Bahan Baku Organik B2B
                   </span>
                   <br />
